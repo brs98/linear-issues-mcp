@@ -4,12 +4,32 @@ import { LinearClient } from './linear/index.js';
 import { registerIssueTools, registerCommentTools, registerLabelTools } from './tools/index.js';
 import { appConfig } from './config.js';
 
+// Parse tool options from environment variables
+const getEnabledTools = (): string[] => {
+  const toolsEnv = process.env.LINEAR_MCP_TOOLS;
+  if (!toolsEnv) {
+    // Default: all tools enabled
+    return ['issues', 'comments', 'labels'];
+  }
+  return toolsEnv.split(',').map(t => t.trim());
+};
+
+// Check if verbose logging is enabled
+const isVerboseLogging = (): boolean => {
+  return process.env.LINEAR_MCP_VERBOSE === 'true';
+};
+
 /**
  * Initialize and start the MCP server for Linear Issues
  */
 async function main() {
   try {
-    console.error('Starting Linear Issues MCP Server...');
+    const enabledTools = getEnabledTools();
+    const verbose = isVerboseLogging();
+    
+    if (verbose) {
+      console.error('Starting Linear Issues MCP Server with tools:', enabledTools);
+    }
 
     // Create Linear API client
     const linearClient = new LinearClient({
@@ -23,18 +43,40 @@ async function main() {
       version: appConfig.server.version,
     });
 
-    // Register tools
-    registerIssueTools(server, linearClient);
-    registerCommentTools(server, linearClient);
-    registerLabelTools(server, linearClient);
+    // Register tools based on options
+    if (enabledTools.includes('issues')) {
+      if (verbose) {
+        console.error('Registering issue tools...');
+      }
+      registerIssueTools(server, linearClient);
+    }
+    
+    if (enabledTools.includes('comments')) {
+      if (verbose) {
+        console.error('Registering comment tools...');
+      }
+      registerCommentTools(server, linearClient);
+    }
+    
+    if (enabledTools.includes('labels')) {
+      if (verbose) {
+        console.error('Registering label tools...');
+      }
+      registerLabelTools(server, linearClient);
+    }
 
     // Create transport
     const transport = new StdioServerTransport();
 
     // Connect the server to the transport
-    console.error('Connecting to transport...');
+    if (verbose) {
+      console.error('Connecting to transport...');
+    }
     await server.connect(transport);
-    console.error('Linear Issues MCP Server started successfully');
+    
+    if (verbose) {
+      console.error('Linear Issues MCP Server started successfully');
+    }
   } catch (error) {
     console.error('Error starting Linear Issues MCP Server:', error);
     process.exit(1);

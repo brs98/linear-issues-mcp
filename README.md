@@ -72,6 +72,35 @@ LOG_LEVEL=info
 
 You can obtain a Linear API key from your Linear account settings.
 
+### Tool Configuration
+
+You can customize which tool groups are enabled using command-line options:
+
+```bash
+# Only include issue tools
+npx linear-issues-mcp --issues-only
+
+# Include issues and comments, but not labels
+npx linear-issues-mcp --no-labels
+
+# Specify exact tools to include
+npx linear-issues-mcp --tools=issues,comments
+```
+
+#### Available Options:
+
+| Option | Description |
+|--------|-------------|
+| `--tools`, `-t` | Specify which tools to include (comma-separated) |
+| `--no-issues` | Exclude issue tools |
+| `--no-comments` | Exclude comment tools |
+| `--no-labels` | Exclude label tools |
+| `--issues-only` | Include only issue tools |
+| `--comments-only` | Include only comment tools |
+| `--labels-only` | Include only label tools |
+| `--verbose`, `-v` | Enable verbose logging |
+| `--help`, `-h` | Show help message |
+
 ## Usage
 
 ### Starting the Server
@@ -81,13 +110,19 @@ You can obtain a Linear API key from your Linear account settings.
 ```bash
 # Start the server
 npm start
+
+# Start with only issue tools
+npm start -- --issues-only
 ```
 
 #### Option 2: Using Docker
 
 ```bash
-# Run with Docker
+# Run with Docker (all tools)
 docker run -it --env-file .env linear-issues-mcp
+
+# Run with Docker (issues only)
+docker run -it --env-file .env linear-issues-mcp --issues-only
 
 # Or using docker-compose
 docker-compose up
@@ -96,8 +131,11 @@ docker-compose up
 #### Option 3: Using NPX
 
 ```bash
-# Run directly with NPX
+# Run directly with NPX (all tools)
 LINEAR_API_KEY=your_linear_api_key npx linear-issues-mcp
+
+# Run with only issue tools
+LINEAR_API_KEY=your_linear_api_key npx linear-issues-mcp --issues-only
 ```
 
 ### Integration with Claude Desktop
@@ -110,6 +148,22 @@ You can integrate this MCP server with Claude Desktop by adding it to your `clau
     "linear": {
       "command": "npx",
       "args": ["-y", "linear-issues-mcp"],
+      "env": {
+        "LINEAR_API_KEY": "<your-linear-api-key>"
+      }
+    }
+  }
+}
+```
+
+To use only specific tools, modify the `args` field:
+
+```json
+{
+  "mcpServers": {
+    "linear": {
+      "command": "npx",
+      "args": ["-y", "linear-issues-mcp", "--issues-only"],
       "env": {
         "LINEAR_API_KEY": "<your-linear-api-key>"
       }

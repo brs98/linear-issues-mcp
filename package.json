@@ -1,6 +1,6 @@
 {
   "name": "linear-issues-mcp",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Model Context Protocol server for Linear Issues API",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

@@ -32,7 +32,7 @@ describe('LinearClient', () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${mockApiKey}`,
+          Authorization: `${mockApiKey}`,
         },
         body: JSON.stringify({
           query: 'query { test }',
@@ -71,7 +71,9 @@ describe('LinearClient', () => {
       (fetch as unknown as ReturnType<typeof vi.fn>).mockResolvedValue(mockResponse);
 
       // Expect the request to throw an error
-      await expect((client as any).request('query { test }')).rejects.toThrow('Linear GraphQL Error:');
+      await expect((client as any).request('query { test }')).rejects.toThrow(
+        'Linear GraphQL Error:'
+      );
     });
   });
 
@@ -142,4 +144,5 @@ describe('LinearClient', () => {
   });
 
   // Add more test cases for other methods as needed
-}); 
+});
+
