@@ -36,7 +36,7 @@ describe('Issue Tools', () => {
   describe('Tool Registration', () => {
     it('should register all issue tools', () => {
       // Verify that the tool function was called for each tool
-      expect(mockTool).toHaveBeenCalledTimes(8);
+      expect(mockTool).toHaveBeenCalledTimes(9);
       
       // Check that the specific tools were registered
       const toolNames = mockTool.mock.calls.map(call => call[0]);
@@ -48,6 +48,7 @@ describe('Issue Tools', () => {
       expect(toolNames).toContain('deleteIssue');
       expect(toolNames).toContain('assignIssue');
       expect(toolNames).toContain('setIssuePriority');
+      expect(toolNames).toContain('getIssueHistory');
     });
   });
 
