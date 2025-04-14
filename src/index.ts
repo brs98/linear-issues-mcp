@@ -1,7 +1,16 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { LinearClient } from './linear/index.js';
-import { registerIssueTools, registerCommentTools, registerLabelTools } from './tools/index.js';
+import { 
+  registerIssueTools, 
+  registerCommentTools, 
+  registerLabelTools,
+  registerRoadmapTools,
+  registerWebhookTools,
+  registerCycleTools,
+  registerProjectTools,
+  registerTeamTools
+} from './tools/index.js';
 import { appConfig } from './config.js';
 
 // Parse tool options from environment variables
@@ -9,7 +18,7 @@ const getEnabledTools = (): string[] => {
   const toolsEnv = process.env.LINEAR_MCP_TOOLS;
   if (!toolsEnv) {
     // Default: all tools enabled
-    return ['issues', 'comments', 'labels'];
+    return ['issues', 'comments', 'labels', 'roadmaps', 'webhooks', 'cycles', 'projects', 'teams'];
   }
   return toolsEnv.split(',').map(t => t.trim());
 };
@@ -63,6 +72,41 @@ async function main() {
         console.error('Registering label tools...');
       }
       registerLabelTools(server, linearClient);
+    }
+    
+    if (enabledTools.includes('roadmaps')) {
+      if (verbose) {
+        console.error('Registering roadmap tools...');
+      }
+      registerRoadmapTools(server, linearClient);
+    }
+    
+    if (enabledTools.includes('webhooks')) {
+      if (verbose) {
+        console.error('Registering webhook tools...');
+      }
+      registerWebhookTools(server, linearClient);
+    }
+    
+    if (enabledTools.includes('cycles')) {
+      if (verbose) {
+        console.error('Registering cycle tools...');
+      }
+      registerCycleTools(server, linearClient);
+    }
+    
+    if (enabledTools.includes('projects')) {
+      if (verbose) {
+        console.error('Registering project tools...');
+      }
+      registerProjectTools(server, linearClient);
+    }
+    
+    if (enabledTools.includes('teams')) {
+      if (verbose) {
+        console.error('Registering team tools...');
+      }
+      registerTeamTools(server, linearClient);
     }
 
     // Create transport

@@ -26,12 +26,12 @@ export class LinearClient {
   /**
    * Make a request to the Linear GraphQL API
    */
-  private async request<T>(query: string, variables?: Record<string, unknown>): Promise<T> {
+  public async request<T>(query: string, variables?: Record<string, unknown>): Promise<T> {
     const response = await fetch(this.baseUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': this.apiKey,
+        'Authorization': this.apiKey,  // Linear API expects the key directly without Bearer prefix
       },
       body: JSON.stringify({
         query,
