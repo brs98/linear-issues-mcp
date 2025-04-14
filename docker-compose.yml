@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  linear-issues-mcp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: linear-issues-mcp
+    stdin_open: true  # Required for stdin communication with MCP
+    tty: true         # Required for proper terminal handling
+    environment:
+      - LINEAR_API_KEY=${LINEAR_API_KEY}
+      - SERVER_NAME=${SERVER_NAME:-linear-issues-mcp}
+      - SERVER_VERSION=${SERVER_VERSION:-1.0.0}
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+    volumes:
+      - ./:/app    # For development, mount source code
+      - /app/node_modules  # Don't overwrite node_modules
+    restart: unless-stopped 
