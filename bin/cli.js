@@ -31,6 +31,15 @@ for (let i = 0; i < args.length; i++) {
     }
     options.tools = toolsArg.split(',').map(t => t.trim());
   }
+  // Handle --tools=value format
+  else if (arg.startsWith('--tools=') || arg.startsWith('-t=')) {
+    const toolsArg = arg.split('=')[1];
+    if (!toolsArg) {
+      console.error('Error: --tools option requires a comma-separated list of tools');
+      process.exit(1);
+    }
+    options.tools = toolsArg.split(',').map(t => t.trim());
+  }
   
   // Individual tool flags
   else if (arg === '--no-issues') {
@@ -94,7 +103,7 @@ Linear Issues MCP Server - CLI Options:
 
 Tool Selection:
   --tools, -t <tools>    Specify which tools to include (comma-separated)
-                         Example: --tools=issues,comments,cycles
+                         Examples: --tools issues,comments  OR  --tools=issues,comments
   --no-issues            Exclude issue tools
   --no-comments          Exclude comment tools
   --no-labels            Exclude label tools
