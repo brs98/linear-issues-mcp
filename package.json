@@ -5,6 +5,13 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
+  "bin": {
+    "linear-issues-mcp": "./bin/cli.js"
+  },
+  "files": [
+    "dist",
+    "bin"
+  ],
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
@@ -14,14 +21,17 @@
     "test:ui": "vitest --ui",
     "lint": "eslint . --ext .ts",
     "format": "prettier --write \"src/**/*.ts\"",
-    "prepare": "npm run build"
+    "prepare": "npm run build",
+    "prepublishOnly": "npm run lint && npm test"
   },
   "keywords": [
     "linear",
     "api",
     "mcp",
     "model-context-protocol",
-    "issues"
+    "issues",
+    "ai",
+    "claude"
   ],
   "author": "",
   "license": "MIT",
@@ -42,5 +52,12 @@
   },
   "engines": {
     "node": ">=18.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/linear-issues-mcp.git"
   }
 }

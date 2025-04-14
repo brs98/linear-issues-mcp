@@ -43,6 +43,20 @@ cd linear-issues-mcp
 docker build -t linear-issues-mcp .
 ```
 
+### Option 3: NPX Usage (Recommended)
+
+You can run the MCP server directly without installation using npx:
+
+```bash
+npx linear-issues-mcp
+```
+
+With environment variables:
+
+```bash
+LINEAR_API_KEY=your_api_key npx linear-issues-mcp
+```
+
 ## Configuration
 
 ### Environment Variables
@@ -79,6 +93,33 @@ docker run -it --env-file .env linear-issues-mcp
 docker-compose up
 ```
 
+#### Option 3: Using NPX
+
+```bash
+# Run directly with NPX
+LINEAR_API_KEY=your_linear_api_key npx linear-issues-mcp
+```
+
+### Integration with Claude Desktop
+
+You can integrate this MCP server with Claude Desktop by adding it to your `claud_desktop_config.json` file:
+
+```json
+{
+  "mcpServers": {
+    "linear": {
+      "command": "npx",
+      "args": ["-y", "linear-issues-mcp"],
+      "env": {
+        "LINEAR_API_KEY": "<your-linear-api-key>"
+      }
+    }
+  }
+}
+```
+
+This configuration allows Claude to interact with your Linear issues directly through the MCP server.
+
 ### Connecting to the MCP Server
 
 The server communicates via stdin/stdout following the MCP protocol. To connect:
@@ -95,8 +136,11 @@ import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js'
 
 // Start the client
 const transport = new StdioClientTransport({
-  command: 'node',
-  args: ['dist/index.js'], // Path to your built MCP server
+  command: 'npx',
+  args: ['-y', 'linear-issues-mcp'], // Run directly via npx
+  env: {
+    LINEAR_API_KEY: 'your_linear_api_key_here'
+  }
 });
 
 const client = new Client({
@@ -187,6 +231,18 @@ npm test
 
 ```bash
 npm run lint
+```
+
+### Publishing to npm
+
+To publish this package to npm:
+
+```bash
+# Login to npm
+npm login
+
+# Build and publish
+npm publish
 ```
 
 ## Docker Development
