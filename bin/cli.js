@@ -99,7 +99,7 @@ for (let i = 0; i < args.length; i++) {
   // Help
   else if (arg === '--help' || arg === '-h') {
     console.log(`
-Linear Issues MCP Server - CLI Options:
+Linear MCP Server - CLI Options:
 
 Tool Selection:
   --tools, -t <tools>    Specify which tools to include (comma-separated)
@@ -130,11 +130,11 @@ Other Options:
 }
 
 // Show startup message
-console.error('Starting Linear Issues MCP Server...');
+console.error('Starting Linear MCP Server...');
 console.error('Working directory:', process.cwd());
 console.error('Environment:');
 console.error(`- LINEAR_API_KEY: ${process.env.LINEAR_API_KEY ? '***' : 'Not set'}`);
-console.error(`- SERVER_NAME: ${process.env.SERVER_NAME || 'linear-issues-mcp'}`);
+console.error(`- SERVER_NAME: ${process.env.SERVER_NAME || 'linear-mcp'}`);
 console.error(`- SERVER_VERSION: ${process.env.SERVER_VERSION || '1.0.0'}`);
 console.error(`- LOG_LEVEL: ${process.env.LOG_LEVEL || 'info'}`);
 console.error('Enabled tool groups:', options.tools.join(', '));

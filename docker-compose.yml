@@ -1,16 +1,16 @@
 version: '3.8'
 
 services:
-  linear-issues-mcp:
+  linear-mcp:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: linear-issues-mcp
+    container_name: linear-mcp
     stdin_open: true  # Required for stdin communication with MCP
     tty: true         # Required for proper terminal handling
     environment:
       - LINEAR_API_KEY=${LINEAR_API_KEY}
-      - SERVER_NAME=${SERVER_NAME:-linear-issues-mcp}
+      - SERVER_NAME=${SERVER_NAME:-linear-mcp}
       - SERVER_VERSION=${SERVER_VERSION:-1.0.0}
       - LOG_LEVEL=${LOG_LEVEL:-info}
       - LINEAR_MCP_TOOLS=${LINEAR_MCP_TOOLS:-issues,comments,labels}  # Tool groups to enable

@@ -7,7 +7,7 @@ dotenv.config();
 // Define environment variable schema
 const envSchema = z.object({
   LINEAR_API_KEY: z.string().min(1, 'Linear API key is required'),
-  SERVER_NAME: z.string().default('linear-issues-mcp'),
+  SERVER_NAME: z.string().default('linear-mcp'),
   SERVER_VERSION: z.string().default('1.0.0'),
   LOG_LEVEL: z.enum(['debug', 'info', 'warn', 'error']).default('info'),
 });

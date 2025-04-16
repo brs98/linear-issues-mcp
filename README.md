@@ -1,6 +1,6 @@
-# Linear Issues MCP Server
+# Linear MCP Server
 
-A Model Context Protocol (MCP) server that integrates with Linear's Issues API, allowing AI models to interact with Linear issues through standardized MCP tools.
+A Model Context Protocol (MCP) server that integrates with Linear's API, allowing AI models to interact with Linear through standardized MCP tools.
 
 ## Features
 
@@ -22,8 +22,8 @@ A Model Context Protocol (MCP) server that integrates with Linear's Issues API, 
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/linear-issues-mcp.git
-cd linear-issues-mcp
+git clone https://github.com/yourusername/linear-mcp.git
+cd linear-mcp
 
 # Install dependencies
 npm install
@@ -36,11 +36,11 @@ npm run build
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/linear-issues-mcp.git
-cd linear-issues-mcp
+git clone https://github.com/yourusername/linear-mcp.git
+cd linear-mcp
 
 # Build the Docker image
-docker build -t linear-issues-mcp .
+docker build -t linear-mcp .
 ```
 
 ### Option 3: NPX Usage (Recommended)
@@ -48,13 +48,13 @@ docker build -t linear-issues-mcp .
 You can run the MCP server directly without installation using npx:
 
 ```bash
-npx linear-issues-mcp
+npx linear-mcp
 ```
 
 With environment variables:
 
 ```bash
-LINEAR_API_KEY=your_api_key npx linear-issues-mcp
+LINEAR_API_KEY=your_api_key npx linear-mcp
 ```
 
 ## Configuration
@@ -65,7 +65,7 @@ Create a `.env` file in the project root with the following variables:
 
 ```
 LINEAR_API_KEY=your_linear_api_key_here
-SERVER_NAME=linear-issues-mcp
+SERVER_NAME=linear-mcp
 SERVER_VERSION=1.0.0
 LOG_LEVEL=info
 ```
@@ -78,13 +78,13 @@ You can customize which tool groups are enabled using command-line options:
 
 ```bash
 # Only include issue tools
-npx linear-issues-mcp --issues-only
+npx linear-mcp --issues-only
 
 # Include issues and comments, but not labels
-npx linear-issues-mcp --no-labels
+npx linear-mcp --no-labels
 
 # Specify exact tools to include
-npx linear-issues-mcp --tools=issues,comments
+npx linear-mcp --tools=issues,comments
 ```
 
 #### Available Options:
@@ -119,10 +119,10 @@ npm start -- --issues-only
 
 ```bash
 # Run with Docker (all tools)
-docker run -it --env-file .env linear-issues-mcp
+docker run -it --env-file .env linear-mcp
 
 # Run with Docker (issues only)
-docker run -it --env-file .env linear-issues-mcp --issues-only
+docker run -it --env-file .env linear-mcp --issues-only
 
 # Or using docker-compose
 docker-compose up
@@ -132,10 +132,10 @@ docker-compose up
 
 ```bash
 # Run directly with NPX (all tools)
-LINEAR_API_KEY=your_linear_api_key npx linear-issues-mcp
+LINEAR_API_KEY=your_linear_api_key npx linear-mcp
 
 # Run with only issue tools
-LINEAR_API_KEY=your_linear_api_key npx linear-issues-mcp --issues-only
+LINEAR_API_KEY=your_linear_api_key npx linear-mcp --issues-only
 ```
 
 ### Integration with Claude Desktop
@@ -147,7 +147,7 @@ You can integrate this MCP server with Claude Desktop by adding it to your `clau
   "mcpServers": {
     "linear": {
       "command": "npx",
-      "args": ["-y", "linear-issues-mcp"],
+      "args": ["-y", "linear-mcp"],
       "env": {
         "LINEAR_API_KEY": "<your-linear-api-key>"
       }
@@ -163,7 +163,7 @@ To use only specific tools, modify the `args` field:
   "mcpServers": {
     "linear": {
       "command": "npx",
-      "args": ["-y", "linear-issues-mcp", "--issues-only"],
+      "args": ["-y", "linear-mcp", "--issues-only"],
       "env": {
         "LINEAR_API_KEY": "<your-linear-api-key>"
       }
@@ -191,7 +191,7 @@ import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js'
 // Start the client
 const transport = new StdioClientTransport({
   command: 'npx',
-  args: ['-y', 'linear-issues-mcp'], // Run directly via npx
+  args: ['-y', 'linear-mcp'], // Run directly via npx
   env: {
     LINEAR_API_KEY: 'your_linear_api_key_here'
   }

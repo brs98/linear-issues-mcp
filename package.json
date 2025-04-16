@@ -1,12 +1,12 @@
 {
-  "name": "linear-issues-mcp",
+  "name": "linear-mcp",
   "version": "1.0.7",
-  "description": "Model Context Protocol server for Linear Issues API",
+  "description": "Model Context Protocol server for Linear API",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
   "bin": {
-    "linear-issues-mcp": "./bin/cli.js"
+    "linear-mcp": "./bin/cli.js"
   },
   "files": [
     "dist",
@@ -58,6 +58,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/linear-issues-mcp.git"
+    "url": "https://github.com/yourusername/linear-mcp.git"
   }
 }
