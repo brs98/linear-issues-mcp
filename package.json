@@ -1,6 +1,6 @@
 {
-  "name": "linear-mcp",
-  "version": "1.0.7",
+  "name": "@brs98/linear-mcp",
+  "version": "0.1.0",
   "description": "Model Context Protocol server for Linear API",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

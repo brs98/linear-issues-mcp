@@ -2,6 +2,87 @@
 
 A Model Context Protocol (MCP) server that integrates with Linear's API, allowing AI models to interact with Linear through standardized MCP tools.
 
+## Quick Start for AI Integrations
+
+### Integration with Claude and Cursor
+
+You can integrate this MCP server with Claude Desktop or Cursor by adding it to your configuration file:
+
+```json
+{
+  "mcpServers": {
+    "linear": {
+      "command": "npx",
+      "args": ["-y", "@brs98/linear-mcp"],
+      "env": {
+        "LINEAR_API_KEY": "<your-linear-api-key>"
+      }
+    }
+  }
+}
+```
+
+To use only specific tools, modify the `args` field:
+
+```json
+{
+  "mcpServers": {
+    "linear": {
+      "command": "npx",
+      "args": ["-y", "@brs98/linear-mcp", "--tools=issues,projects"],
+      "env": {
+        "LINEAR_API_KEY": "<your-linear-api-key>"
+      }
+    }
+  }
+}
+```
+
+This configuration allows Claude and other AI assistants to interact with your Linear instance directly through the MCP server.
+
+### NPX Usage
+
+You can run the MCP server directly without installation using npx:
+
+```bash
+npx @brs98/linear-mcp
+```
+
+With environment variables:
+
+```bash
+LINEAR_API_KEY=your_api_key npx @brs98/linear-mcp
+```
+
+### Available CLI Options
+
+You can customize which tool groups are enabled using command-line options:
+
+```bash
+# Only include issue tools
+npx @brs98/linear-mcp --issues-only
+
+# Include issues and comments, but not labels
+npx @brs98/linear-mcp --no-labels
+
+# Specify exact tools to include
+npx @brs98/linear-mcp --tools=issues,comments
+```
+
+#### CLI Options Reference:
+
+| Option | Description |
+|--------|-------------|
+| `--tools`, `-t` | Specify which tools to include (comma-separated) |
+| `--no-issues` | Exclude issue tools |
+| `--no-comments` | Exclude comment tools |
+| `--no-labels` | Exclude label tools |
+| `--issues-only` | Include only issue tools |
+| `--comments-only` | Include only comment tools |
+| `--labels-only` | Include only label tools |
+| `--verbose`, `-v` | Enable verbose logging |
+| `--help`, `-h` | Show help message |
+
 ## Features
 
 - Get and search Linear issues
@@ -40,21 +121,7 @@ git clone https://github.com/yourusername/linear-mcp.git
 cd linear-mcp
 
 # Build the Docker image
-docker build -t linear-mcp .
-```
-
-### Option 3: NPX Usage (Recommended)
-
-You can run the MCP server directly without installation using npx:
-
-```bash
-npx linear-mcp
-```
-
-With environment variables:
-
-```bash
-LINEAR_API_KEY=your_api_key npx linear-mcp
+docker build -t @brs98/linear-mcp .
 ```
 
 ## Configuration
@@ -71,35 +138,6 @@ LOG_LEVEL=info
 ```
 
 You can obtain a Linear API key from your Linear account settings.
-
-### Tool Configuration
-
-You can customize which tool groups are enabled using command-line options:
-
-```bash
-# Only include issue tools
-npx linear-mcp --issues-only
-
-# Include issues and comments, but not labels
-npx linear-mcp --no-labels
-
-# Specify exact tools to include
-npx linear-mcp --tools=issues,comments
-```
-
-#### Available Options:
-
-| Option | Description |
-|--------|-------------|
-| `--tools`, `-t` | Specify which tools to include (comma-separated) |
-| `--no-issues` | Exclude issue tools |
-| `--no-comments` | Exclude comment tools |
-| `--no-labels` | Exclude label tools |
-| `--issues-only` | Include only issue tools |
-| `--comments-only` | Include only comment tools |
-| `--labels-only` | Include only label tools |
-| `--verbose`, `-v` | Enable verbose logging |
-| `--help`, `-h` | Show help message |
 
 ## Usage
 
@@ -119,60 +157,14 @@ npm start -- --issues-only
 
 ```bash
 # Run with Docker (all tools)
-docker run -it --env-file .env linear-mcp
+docker run -it --env-file .env @brs98/linear-mcp
 
 # Run with Docker (issues only)
-docker run -it --env-file .env linear-mcp --issues-only
+docker run -it --env-file .env @brs98/linear-mcp --issues-only
 
 # Or using docker-compose
 docker-compose up
 ```
-
-#### Option 3: Using NPX
-
-```bash
-# Run directly with NPX (all tools)
-LINEAR_API_KEY=your_linear_api_key npx linear-mcp
-
-# Run with only issue tools
-LINEAR_API_KEY=your_linear_api_key npx linear-mcp --issues-only
-```
-
-### Integration with Claude Desktop
-
-You can integrate this MCP server with Claude Desktop by adding it to your `claud_desktop_config.json` file:
-
-```json
-{
-  "mcpServers": {
-    "linear": {
-      "command": "npx",
-      "args": ["-y", "linear-mcp"],
-      "env": {
-        "LINEAR_API_KEY": "<your-linear-api-key>"
-      }
-    }
-  }
-}
-```
-
-To use only specific tools, modify the `args` field:
-
-```json
-{
-  "mcpServers": {
-    "linear": {
-      "command": "npx",
-      "args": ["-y", "linear-mcp", "--issues-only"],
-      "env": {
-        "LINEAR_API_KEY": "<your-linear-api-key>"
-      }
-    }
-  }
-}
-```
-
-This configuration allows Claude to interact with your Linear issues directly through the MCP server.
 
 ### Connecting to the MCP Server
 
@@ -191,14 +183,14 @@ import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js'
 // Start the client
 const transport = new StdioClientTransport({
   command: 'npx',
-  args: ['-y', 'linear-mcp'], // Run directly via npx
+  args: ['-y', '@brs98/linear-mcp'], // Run directly via npx
   env: {
     LINEAR_API_KEY: 'your_linear_api_key_here'
   }
 });
 
 const client = new Client({
-  name: 'linear-issues-client',
+  name: 'linear-mcp-client',
   version: '1.0.0',
 });
 
