@@ -1,11 +1,14 @@
 import { z } from 'zod';
-import { LinearClient } from '../linear/client.js';
+import { LinearClient, LinearTeamsClient } from '../linear/index.js';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 
 /**
  * Register issue-related tools with the MCP server
  */
 export function registerIssueTools(server: McpServer, linearClient: LinearClient) {
+  // Create teams client for team operations
+  const teamsClient = new LinearTeamsClient(linearClient);
+
   // Get issues list
   server.tool(
     'getIssues',
@@ -113,7 +116,7 @@ export function registerIssueTools(server: McpServer, linearClient: LinearClient
     {
       title: z.string().describe('Title of the issue'),
       description: z.string().optional().describe('Description of the issue (Markdown supported)'),
-      teamId: z.string().optional().describe('ID of the team the issue belongs to'),
+      teamId: z.string().describe('ID of the team the issue belongs to'),
       assigneeId: z.string().optional().describe('ID of the user to assign the issue to'),
       stateId: z.string().optional().describe('ID of the workflow state for the issue'),
       priority: z.number().optional().describe('Priority of the issue (0-4)'),
@@ -122,7 +125,23 @@ export function registerIssueTools(server: McpServer, linearClient: LinearClient
     },
     async (params) => {
       try {
-        const issue = await linearClient.createIssue(params);
+        const { teamId: providedTeamId, ...rest } = params;
+        
+        // If no teamId is provided, fetch the first available team
+        let teamId = providedTeamId;
+        if (!teamId) {
+          const teams = await teamsClient.getTeams();
+          if (teams.length === 0) {
+            throw new Error('No teams found. A team ID is required to create an issue.');
+          }
+          teamId = teams[0].id;
+        }
+        
+        const issue = await linearClient.createIssue({
+          ...rest,
+          teamId
+        });
+        
         return {
           content: [
             {

@@ -76,7 +76,7 @@ export interface LinearUser {
 export interface CreateIssueParams {
   title: string;
   description?: string;
-  teamId?: string;
+  teamId: string;
   assigneeId?: string;
   stateId?: string;
   priority?: number;
