@@ -29,7 +29,7 @@ To use only specific tools, modify the `args` field:
   "mcpServers": {
     "linear": {
       "command": "npx",
-      "args": ["-y", "@brs98/linear-mcp", "--tools=issues,projects"],
+      "args": ["-y", "@brs98/linear-mcp", "--tools=issues,projects,teams,cycles"],
       "env": {
         "LINEAR_API_KEY": "<your-linear-api-key>"
       }
@@ -67,6 +67,15 @@ npx @brs98/linear-mcp --no-labels
 
 # Specify exact tools to include
 npx @brs98/linear-mcp --tools=issues,comments
+
+# Only include project and team tools
+npx @brs98/linear-mcp --tools=projects,teams
+
+# Include all tools except webhooks
+npx @brs98/linear-mcp --no-webhooks
+
+# Only cycle tools for sprint planning
+npx @brs98/linear-mcp --cycles-only
 ```
 
 #### CLI Options Reference:
@@ -77,9 +86,19 @@ npx @brs98/linear-mcp --tools=issues,comments
 | `--no-issues` | Exclude issue tools |
 | `--no-comments` | Exclude comment tools |
 | `--no-labels` | Exclude label tools |
+| `--no-teams` | Exclude team tools |
+| `--no-projects` | Exclude project tools |
+| `--no-cycles` | Exclude cycle tools |
+| `--no-roadmaps` | Exclude roadmap tools |
+| `--no-webhooks` | Exclude webhook tools |
 | `--issues-only` | Include only issue tools |
 | `--comments-only` | Include only comment tools |
 | `--labels-only` | Include only label tools |
+| `--teams-only` | Include only team tools |
+| `--projects-only` | Include only project tools |
+| `--cycles-only` | Include only cycle tools |
+| `--roadmaps-only` | Include only roadmap tools |
+| `--webhooks-only` | Include only webhook tools |
 | `--verbose`, `-v` | Enable verbose logging |
 | `--help`, `-h` | Show help message |
 
@@ -87,9 +106,14 @@ npx @brs98/linear-mcp --tools=issues,comments
 
 - Get and search Linear issues
 - Create, update, and delete issues
-- Manage issue properties (labels, assignees)
+- Manage issue properties (labels, assignees, priority)
 - Work with issue comments
-- Search functionality
+- Team management operations
+- Project management capabilities
+- Sprint/cycle planning and tracking
+- Roadmap management
+- Webhook configuration
+- Full integration with Linear's GraphQL API
 
 ## Requirements
 
@@ -209,7 +233,7 @@ console.log(issues);
 
 ### Available Tools
 
-#### Issue Operations
+#### Issue Operations - `issues`
 
 - `getIssues` - Get a list of issues
 - `getIssueById` - Get a specific issue by ID
@@ -219,45 +243,61 @@ console.log(issues);
 - `deleteIssue` - Delete an issue
 - `assignIssue` - Assign an issue to a user
 - `setIssuePriority` - Set the priority of an issue
+- `getIssueHistory` - Get history of an issue
 
-#### Comment Operations
+#### Comment Operations - `comments`
 
 - `getComments` - Get comments for an issue
 - `createComment` - Add a comment to an issue
 
-#### Label Operations
+#### Label Operations - `labels`
 
 - `getLabels` - Get all available labels
 - `addIssueLabel` - Add a label to an issue
 - `removeIssueLabel` - Remove a label from an issue
 
-### Tool Parameter Reference
+#### Team Operations - `teams`
 
-#### `getIssues`
-```javascript
-{
-  limit: number // Optional, default: 25. Maximum number of issues to return
-}
-```
+- `getTeams` - Get a list of teams
+- `getTeamById` - Get a specific team by ID
+- `createTeam` - Create a new team
+- `updateTeam` - Update an existing team
+- `getTeamMembers` - Get members of a team
 
-#### `getIssueById`
-```javascript
-{
-  id: string // Required. The ID or identifier of the issue
-}
-```
+#### Project Operations - `projects`
 
-#### `searchIssues`
-```javascript
-{
-  query: string    // Optional. Text to search for in issue title or description
-  teamId: string   // Optional. Filter issues by team ID
-  assigneeId: string // Optional. Filter issues by assignee ID
-  stateId: string  // Optional. Filter issues by state ID
-  labelIds: string[] // Optional. Filter issues by label IDs
-  limit: number    // Optional, default: 25. Maximum number of issues to return
-}
-```
+- `getProjects` - Get a list of projects
+- `getProjectById` - Get a specific project by ID
+- `createProject` - Create a new project
+- `updateProject` - Update an existing project
+- `deleteProject` - Delete a project
+- `getProjectIssues` - Get issues associated with a project
+- `addIssueToProject` - Add an issue to a project
+- `removeIssueFromProject` - Remove an issue from a project
+
+#### Cycle Operations - `cycles`
+
+- `getCycles` - Get a list of cycles
+- `getCycleById` - Get a specific cycle by ID
+- `getActiveCycle` - Get the active cycle for a team
+- `createCycle` - Create a new cycle
+- `updateCycle` - Update an existing cycle
+- `getCycleIssues` - Get issues in a cycle
+- `addIssueToCycle` - Add an issue to a cycle
+- `removeIssueFromCycle` - Remove an issue from a cycle
+
+#### Roadmap Operations - `roadmaps`
+
+- `getRoadmaps` - Get a list of roadmaps
+- `getRoadmapById` - Get a specific roadmap by ID
+- `createRoadmap` - Create a new roadmap
+- `updateRoadmap` - Update an existing roadmap
+
+#### Webhook Operations - `webhooks`
+
+- `createWebhook` - Create a new webhook
+- `getWebhooks` - Get a list of webhooks
+- `deleteWebhook` - Delete a webhook
 
 ## Development
 
@@ -311,4 +351,4 @@ This will mount your local directory into the container, allowing you to make ch
 
 ## License
 
-MIT 
+MIT
