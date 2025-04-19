@@ -5,7 +5,6 @@ import {
   registerIssueTools,
   registerCommentTools,
   registerLabelTools,
-  registerRoadmapTools,
   registerWebhookTools,
   registerProjectTools,
   registerTeamTools,
@@ -17,7 +16,7 @@ const getEnabledTools = (): string[] => {
   const toolsEnv = process.env.LINEAR_MCP_TOOLS;
   if (!toolsEnv) {
     // Default: all tools enabled
-    return ['issues', 'comments', 'labels', 'roadmaps', 'webhooks', 'cycles', 'projects', 'teams'];
+    return ['issues', 'comments', 'labels', 'webhooks', 'projects', 'teams'];
   }
   return toolsEnv.split(',').map((t) => t.trim());
 };
@@ -70,13 +69,6 @@ async function main() {
         console.error('Registering label tools...');
       }
       registerLabelTools(server, linearClient);
-    }
-
-    if (enabledTools.includes('roadmaps')) {
-      if (verbose) {
-        console.error('Registering roadmap tools...');
-      }
-      registerRoadmapTools(server, linearClient);
     }
 
     if (enabledTools.includes('webhooks')) {
