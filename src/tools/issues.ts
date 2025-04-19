@@ -151,11 +151,11 @@ export function registerIssueTools(server: McpServer, linearClient: LinearClient
   server.tool(
     'deleteIssue',
     {
-      id: z.custom<Parameters<(typeof linearClient)['deleteIssue']>[0]>(),
+      issueId: z.custom<Parameters<(typeof linearClient)['deleteIssue']>[0]>(),
     },
-    async ({ id }) => {
+    async ({ issueId }) => {
       try {
-        const { success } = await linearClient.deleteIssue(id);
+        const { success } = await linearClient.deleteIssue(issueId);
 
         return {
           content: [

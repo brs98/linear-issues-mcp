@@ -1,30 +1,57 @@
 import { z } from 'zod';
-import { LinearClient, LinearProjectsClient } from '../linear/index.js';
+import { LinearClient } from '@linear/sdk';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 
 /**
  * Register project-related tools with the MCP server
  */
 export function registerProjectTools(server: McpServer, linearClient: LinearClient) {
-  // Create projects client
-  const projectsClient = new LinearProjectsClient(linearClient);
+  server.tool(
+    'getProject',
+    {
+      projectId: z.custom<Parameters<(typeof linearClient)['project']>[0]>(),
+    },
+    async ({ projectId }) => {
+      try {
+        const project = await linearClient.project(projectId);
+        return {
+          content: [
+            {
+              type: 'text',
+              text: JSON.stringify(project, null, 2),
+            },
+          ],
+        };
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        return {
+          content: [
+            {
+              type: 'text',
+              text: `Error fetching project: ${errorMessage}`,
+            },
+          ],
+          isError: true,
+        };
+      }
+    }
+  );
 
-  // Get projects
   server.tool(
     'getProjects',
     {
-      limit: z.number().optional().default(25).describe('Maximum number of projects to return')
+      filter: z.custom<Parameters<(typeof linearClient)['projects']>[0]>().optional(),
     },
-    async ({ limit }) => {
+    async ({ filter }) => {
       try {
-        const projects = await projectsClient.getProjects(limit);
+        const projects = await linearClient.projects(filter);
         return {
           content: [
             {
               type: 'text',
-              text: JSON.stringify(projects, null, 2)
-            }
-          ]
+              text: JSON.stringify(projects, null, 2),
+            },
+          ],
         };
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : String(error);
@@ -32,8 +59,8 @@ export function registerProjectTools(server: McpServer, linearClient: LinearClie
           content: [
             {
               type: 'text',
-              text: `Error fetching projects: ${errorMessage}`
-            }
+              text: `Error fetching projects: ${errorMessage}`,
+            },
           ],
           isError: true,
         };
@@ -41,22 +68,21 @@ export function registerProjectTools(server: McpServer, linearClient: LinearClie
     }
   );
 
-  // Get project by ID
   server.tool(
-    'getProjectById',
+    'getProjectUpdate',
     {
-      id: z.string().describe('The ID of the project')
+      projectUpdateId: z.custom<Parameters<(typeof linearClient)['projectUpdate']>[0]>(),
     },
-    async ({ id }) => {
+    async ({ projectUpdateId }) => {
       try {
-        const project = await projectsClient.getProjectById(id);
+        const projectUpdate = await linearClient.projectUpdate(projectUpdateId);
         return {
           content: [
             {
               type: 'text',
-              text: JSON.stringify(project, null, 2)
-            }
-          ]
+              text: JSON.stringify(projectUpdate, null, 2),
+            },
+          ],
         };
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : String(error);
@@ -64,8 +90,8 @@ export function registerProjectTools(server: McpServer, linearClient: LinearClie
           content: [
             {
               type: 'text',
-              text: `Error fetching project: ${errorMessage}`
-            }
+              text: `Error fetching project update: ${errorMessage}`,
+            },
           ],
           isError: true,
         };
@@ -73,27 +99,52 @@ export function registerProjectTools(server: McpServer, linearClient: LinearClie
     }
   );
 
-  // Create project
+  server.tool(
+    'getProjectUpdates',
+    {
+      variables: z.custom<Parameters<(typeof linearClient)['projectUpdates']>[0]>().optional(),
+    },
+    async ({ variables }) => {
+      try {
+        const projectUpdates = await linearClient.projectUpdates(variables);
+        return {
+          content: [
+            {
+              type: 'text',
+              text: JSON.stringify(projectUpdates, null, 2),
+            },
+          ],
+        };
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        return {
+          content: [
+            {
+              type: 'text',
+              text: `Error fetching project updates: ${errorMessage}`,
+            },
+          ],
+          isError: true,
+        };
+      }
+    }
+  );
+
   server.tool(
     'createProject',
     {
-      name: z.string().describe('Name of the project'),
-      description: z.string().optional().describe('Description of the project'),
-      state: z.string().optional().describe('State of the project (e.g., "planned", "started", "completed")'),
-      teamIds: z.array(z.string()).describe('IDs of the teams for this project'),
-      startDate: z.string().optional().describe('Start date of the project (ISO format)'),
-      targetDate: z.string().optional().describe('Target end date of the project (ISO format)')
+      input: z.custom<Parameters<(typeof linearClient)['createProject']>[0]>(),
     },
-    async (params) => {
+    async ({ input }) => {
       try {
-        const project = await projectsClient.createProject(params);
+        const project = await linearClient.createProject(input);
         return {
           content: [
             {
               type: 'text',
-              text: JSON.stringify(project, null, 2)
-            }
-          ]
+              text: JSON.stringify(project, null, 2),
+            },
+          ],
         };
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : String(error);
@@ -101,8 +152,8 @@ export function registerProjectTools(server: McpServer, linearClient: LinearClie
           content: [
             {
               type: 'text',
-              text: `Error creating project: ${errorMessage}`
-            }
+              text: `Error creating project: ${errorMessage}`,
+            },
           ],
           isError: true,
         };
@@ -110,28 +161,21 @@ export function registerProjectTools(server: McpServer, linearClient: LinearClie
     }
   );
 
-  // Update project
   server.tool(
-    'updateProject',
+    'createProjectUpdate',
     {
-      id: z.string().describe('ID of the project to update'),
-      name: z.string().optional().describe('New name for the project'),
-      description: z.string().optional().describe('New description for the project'),
-      state: z.string().optional().describe('New state for the project'),
-      teamIds: z.array(z.string()).optional().describe('New team IDs for the project'),
-      startDate: z.string().optional().describe('New start date for the project (ISO format)'),
-      targetDate: z.string().optional().describe('New target date for the project (ISO format)')
+      input: z.custom<Parameters<(typeof linearClient)['createProjectUpdate']>[0]>(),
     },
-    async (params) => {
+    async ({ input }) => {
       try {
-        const project = await projectsClient.updateProject(params);
+        const projectUpdate = await linearClient.createProjectUpdate(input);
         return {
           content: [
             {
               type: 'text',
-              text: JSON.stringify(project, null, 2)
-            }
-          ]
+              text: JSON.stringify(projectUpdate, null, 2),
+            },
+          ],
         };
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : String(error);
@@ -139,144 +183,12 @@ export function registerProjectTools(server: McpServer, linearClient: LinearClie
           content: [
             {
               type: 'text',
-              text: `Error updating project: ${errorMessage}`
-            }
+              text: `Error creating project update: ${errorMessage}`,
+            },
           ],
           isError: true,
         };
       }
     }
   );
-
-  // Delete project
-  server.tool(
-    'deleteProject',
-    {
-      id: z.string().describe('ID of the project to delete')
-    },
-    async ({ id }) => {
-      try {
-        const success = await projectsClient.deleteProject(id);
-        return {
-          content: [
-            {
-              type: 'text',
-              text: success 
-                ? `Project ${id} successfully deleted` 
-                : `Failed to delete project ${id}`
-            }
-          ]
-        };
-      } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error);
-        return {
-          content: [
-            {
-              type: 'text',
-              text: `Error deleting project: ${errorMessage}`
-            }
-          ],
-          isError: true,
-        };
-      }
-    }
-  );
-
-  // Get project issues
-  server.tool(
-    'getProjectIssues',
-    {
-      projectId: z.string().describe('ID of the project'),
-      limit: z.number().optional().default(25).describe('Maximum number of issues to return')
-    },
-    async ({ projectId, limit }) => {
-      try {
-        const issues = await projectsClient.getProjectIssues(projectId, limit);
-        return {
-          content: [
-            {
-              type: 'text',
-              text: JSON.stringify(issues, null, 2)
-            }
-          ]
-        };
-      } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error);
-        return {
-          content: [
-            {
-              type: 'text',
-              text: `Error fetching project issues: ${errorMessage}`
-            }
-          ],
-          isError: true,
-        };
-      }
-    }
-  );
-
-  // Add issue to project
-  server.tool(
-    'addIssueToProject',
-    {
-      issueId: z.string().describe('ID of the issue'),
-      projectId: z.string().describe('ID of the project')
-    },
-    async ({ issueId, projectId }) => {
-      try {
-        const issue = await projectsClient.addIssueToProject(issueId, projectId);
-        return {
-          content: [
-            {
-              type: 'text',
-              text: JSON.stringify(issue, null, 2)
-            }
-          ]
-        };
-      } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error);
-        return {
-          content: [
-            {
-              type: 'text',
-              text: `Error adding issue to project: ${errorMessage}`
-            }
-          ],
-          isError: true,
-        };
-      }
-    }
-  );
-
-  // Remove issue from project
-  server.tool(
-    'removeIssueFromProject',
-    {
-      issueId: z.string().describe('ID of the issue to remove from its project')
-    },
-    async ({ issueId }) => {
-      try {
-        const issue = await projectsClient.removeIssueFromProject(issueId);
-        return {
-          content: [
-            {
-              type: 'text',
-              text: JSON.stringify(issue, null, 2)
-            }
-          ]
-        };
-      } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error);
-        return {
-          content: [
-            {
-              type: 'text',
-              text: `Error removing issue from project: ${errorMessage}`
-            }
-          ],
-          isError: true,
-        };
-      }
-    }
-  );
-} 
+}
