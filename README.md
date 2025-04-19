@@ -220,15 +220,12 @@ console.log(issues);
 
 #### Issue Operations - `issues`
 
+- `getIssue` - Get a specific issue by ID
 - `getIssues` - Get a list of issues
-- `getIssueById` - Get a specific issue by ID
-- `searchIssues` - Search for issues with various filters
 - `createIssue` - Create a new issue
 - `updateIssue` - Update an existing issue
 - `deleteIssue` - Delete an issue
-- `assignIssue` - Assign an issue to a user
-- `setIssuePriority` - Set the priority of an issue
-- `getIssueHistory` - Get history of an issue
+- `createIssueBatch` - Create multiple issues in a batch
 
 #### Comment Operations - `comments`
 
@@ -243,22 +240,18 @@ console.log(issues);
 
 #### Team Operations - `teams`
 
-- `getTeams` - Get a list of teams
 - `getTeamById` - Get a specific team by ID
-- `createTeam` - Create a new team
-- `updateTeam` - Update an existing team
+- `getTeams` - Get a list of teams
 - `getTeamMembers` - Get members of a team
 
 #### Project Operations - `projects`
 
+- `getProject` - Get a specific project by ID
 - `getProjects` - Get a list of projects
-- `getProjectById` - Get a specific project by ID
+- `getProjectUpdate` - Get a specific project update
+- `getProjectUpdates` - Get all project updates
 - `createProject` - Create a new project
-- `updateProject` - Update an existing project
-- `deleteProject` - Delete a project
-- `getProjectIssues` - Get issues associated with a project
-- `addIssueToProject` - Add an issue to a project
-- `removeIssueFromProject` - Remove an issue from a project
+- `createProjectUpdate` - Create a project update
 
 ## Development
 
