@@ -116,6 +116,7 @@ export function registerIssueTools(server: McpServer, linearClient: LinearClient
                 success: response.success,
                 issue: await response.issue?.then((issue) => ({
                   id: issue.id,
+                  identifier: issue.identifier,
                   number: issue.number,
                   title: issue.title,
                   description: issue.description,
