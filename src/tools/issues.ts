@@ -57,7 +57,26 @@ export function registerIssueTools(server: McpServer, linearClient: LinearClient
           content: [
             {
               type: 'text',
-              text: JSON.stringify(issues, null, 2),
+              text: JSON.stringify(
+                await Promise.all(
+                  issues.nodes.map((issue) => ({
+                    id: issue.id,
+                    title: issue.title,
+                    description: issue.description,
+                    state: issue.state,
+                    priority: issue.priority,
+                    labels: issue.labels().then((l) =>
+                      l.nodes.map((label) => ({
+                        id: label.id,
+                        name: label.name,
+                        color: label.color,
+                      }))
+                    ),
+                  }))
+                ),
+                null,
+                2
+              ),
             },
           ],
         };

@@ -21,7 +21,21 @@ export function registerTeamTools(server: McpServer, linearClient: LinearClient)
           content: [
             {
               type: 'text',
-              text: JSON.stringify(team, null, 2),
+              text: JSON.stringify(
+                {
+                  id: team.id,
+                  name: team.name,
+                  description: team.description,
+                  members: await team.members().then((m) =>
+                    m.nodes.map((member) => ({
+                      id: member.id,
+                      name: member.name,
+                    }))
+                  ),
+                },
+                null,
+                2
+              ),
             },
           ],
         };
@@ -58,11 +72,26 @@ export function registerTeamTools(server: McpServer, linearClient: LinearClient)
               type: 'text',
               text: JSON.stringify(
                 teams.nodes.reduce<
-                  Record<string, { name: string; description: string | undefined }>
+                  Record<
+                    string,
+                    {
+                      id: string;
+                      name: string;
+                      description: string | undefined;
+                      members: Promise<{ id: string; name: string }[]>;
+                    }
+                  >
                 >((acc, team) => {
                   acc[team.id] = {
+                    id: team.id,
                     name: team.name,
                     description: team.description,
+                    members: team.members().then((m) =>
+                      m.nodes.map((member) => ({
+                        id: member.id,
+                        name: member.name,
+                      }))
+                    ),
                   };
                   return acc;
                 }, {}),
@@ -79,40 +108,6 @@ export function registerTeamTools(server: McpServer, linearClient: LinearClient)
             {
               type: 'text',
               text: `Error fetching teams: ${errorMessage}`,
-            },
-          ],
-          isError: true,
-        };
-      }
-    }
-  );
-
-  // Get team members
-  server.tool(
-    'getTeamMembers',
-    {
-      variables: z
-        .custom<Parameters<(typeof linearClient)['teamMemberships']>[0]>()
-        .describe('Input for fetching team members'),
-    },
-    async ({ variables }) => {
-      try {
-        const members = await linearClient.teamMemberships(variables);
-        return {
-          content: [
-            {
-              type: 'text',
-              text: JSON.stringify(members, null, 2),
-            },
-          ],
-        };
-      } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error);
-        return {
-          content: [
-            {
-              type: 'text',
-              text: `Error fetching team members: ${errorMessage}`,
             },
           ],
           isError: true,

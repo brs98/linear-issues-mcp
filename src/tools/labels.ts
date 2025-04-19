@@ -22,7 +22,15 @@ export function registerLabelTools(server: McpServer, linearClient: LinearClient
           content: [
             {
               type: 'text',
-              text: JSON.stringify(labels, null, 2),
+              text: JSON.stringify(
+                labels.nodes.map((label) => ({
+                  id: label.id,
+                  name: label.name,
+                  color: label.color,
+                })),
+                null,
+                2
+              ),
             },
           ],
         };
@@ -115,4 +123,3 @@ export function registerLabelTools(server: McpServer, linearClient: LinearClient
     }
   );
 }
-

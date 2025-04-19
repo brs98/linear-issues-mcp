@@ -3,13 +3,15 @@ import { LinearClient } from '@linear/sdk';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 
 /**
- * Register team-related tools with the MCP server
+ * Register user-related tools with the MCP server
  */
 export function registerUserTools(server: McpServer, linearClient: LinearClient) {
   server.tool(
     'getUserById',
     {
-      userId: z.custom<Parameters<(typeof linearClient)['user']>[0]>(),
+      userId: z
+        .custom<Parameters<(typeof linearClient)['user']>[0]>()
+        .describe('ID of the user to fetch'),
     },
     async ({ userId }) => {
       try {
@@ -40,7 +42,10 @@ export function registerUserTools(server: McpServer, linearClient: LinearClient)
   server.tool(
     'getUsers',
     {
-      variables: z.custom<Parameters<(typeof linearClient)['users']>[0]>().optional(),
+      variables: z
+        .custom<Parameters<(typeof linearClient)['users']>[0]>()
+        .optional()
+        .describe('Input for fetching users'),
     },
     async ({ variables }) => {
       try {
@@ -49,7 +54,38 @@ export function registerUserTools(server: McpServer, linearClient: LinearClient)
           content: [
             {
               type: 'text',
-              text: JSON.stringify(users, null, 2),
+              text: JSON.stringify(
+                users.nodes.reduce<
+                  Record<
+                    string,
+                    {
+                      id: string;
+                      name: string;
+                      email: string | undefined;
+                      displayName: string | undefined;
+                      teams: Promise<{ id: string; name: string }[]>;
+                    }
+                  >
+                >((acc, user) => {
+                  acc[user.id] = {
+                    id: user.id,
+                    name: user.name,
+                    email: user.email,
+                    displayName: user.displayName,
+                    teams: user.teams().then((teams) =>
+                      teams.nodes.map((team) => {
+                        return {
+                          id: team.id,
+                          name: team.name,
+                        };
+                      })
+                    ),
+                  };
+                  return acc;
+                }, {}),
+                null,
+                2
+              ),
             },
           ],
         };

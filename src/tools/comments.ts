@@ -21,7 +21,17 @@ export function registerCommentTools(server: McpServer, linearClient: LinearClie
           content: [
             {
               type: 'text',
-              text: JSON.stringify(comments, null, 2),
+              text: JSON.stringify(
+                comments.nodes.map((comment) => ({
+                  id: comment.id,
+                  body: comment.body,
+                  issue: comment.issue,
+                  createdAt: comment.createdAt,
+                  user: comment.user,
+                })),
+                null,
+                2
+              ),
             },
           ],
         };
@@ -74,4 +84,3 @@ export function registerCommentTools(server: McpServer, linearClient: LinearClie
     }
   );
 }
-

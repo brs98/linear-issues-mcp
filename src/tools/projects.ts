@@ -20,7 +20,21 @@ export function registerProjectTools(server: McpServer, linearClient: LinearClie
           content: [
             {
               type: 'text',
-              text: JSON.stringify(project, null, 2),
+              text: JSON.stringify(
+                {
+                  id: project.id,
+                  name: project.name,
+                  description: project.description,
+                  team: await project.teams().then((t) =>
+                    t.nodes.map((team) => ({
+                      id: team.id,
+                      name: team.name,
+                    }))
+                  ),
+                },
+                null,
+                2
+              ),
             },
           ],
         };
@@ -54,7 +68,23 @@ export function registerProjectTools(server: McpServer, linearClient: LinearClie
           content: [
             {
               type: 'text',
-              text: JSON.stringify(projects, null, 2),
+              text: JSON.stringify(
+                await Promise.all(
+                  projects.nodes.map((project) => ({
+                    id: project.id,
+                    name: project.name,
+                    description: project.description,
+                    teams: project.teams().then((t) =>
+                      t.nodes.map((team) => ({
+                        id: team.id,
+                        name: team.name,
+                      }))
+                    ),
+                  }))
+                ),
+                null,
+                2
+              ),
             },
           ],
         };
@@ -87,7 +117,16 @@ export function registerProjectTools(server: McpServer, linearClient: LinearClie
           content: [
             {
               type: 'text',
-              text: JSON.stringify(projectUpdate, null, 2),
+              text: JSON.stringify(
+                {
+                  id: projectUpdate.id,
+                  project: projectUpdate.project,
+                  body: projectUpdate.body,
+                  user: projectUpdate.user,
+                },
+                null,
+                2
+              ),
             },
           ],
         };
@@ -121,7 +160,18 @@ export function registerProjectTools(server: McpServer, linearClient: LinearClie
           content: [
             {
               type: 'text',
-              text: JSON.stringify(projectUpdates, null, 2),
+              text: JSON.stringify(
+                await Promise.all(
+                  projectUpdates.nodes.map((projectUpdate) => ({
+                    id: projectUpdate.id,
+                    project: projectUpdate.project,
+                    body: projectUpdate.body,
+                    user: projectUpdate.user,
+                  }))
+                ),
+                null,
+                2
+              ),
             },
           ],
         };
@@ -154,7 +204,24 @@ export function registerProjectTools(server: McpServer, linearClient: LinearClie
           content: [
             {
               type: 'text',
-              text: JSON.stringify(project, null, 2),
+              text: JSON.stringify(
+                {
+                  success: project.success,
+                  project: await project.project?.then(async (p) => ({
+                    id: p.id,
+                    name: p.name,
+                    description: p.description,
+                    team: await p.teams().then(async (t) =>
+                      t.nodes.map((team) => ({
+                        id: team.id,
+                        name: team.name,
+                      }))
+                    ),
+                  })),
+                },
+                null,
+                2
+              ),
             },
           ],
         };
@@ -187,7 +254,19 @@ export function registerProjectTools(server: McpServer, linearClient: LinearClie
           content: [
             {
               type: 'text',
-              text: JSON.stringify(projectUpdate, null, 2),
+              text: JSON.stringify(
+                {
+                  success: projectUpdate.success,
+                  projectUpdate: await projectUpdate.projectUpdate?.then(async (pu) => ({
+                    id: pu.id,
+                    project: pu.project,
+                    body: pu.body,
+                    user: pu.user,
+                  })),
+                },
+                null,
+                2
+              ),
             },
           ],
         };

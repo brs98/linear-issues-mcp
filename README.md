@@ -13,7 +13,7 @@ You can integrate this MCP server with Claude Desktop or Cursor by adding it to 
   "mcpServers": {
     "linear": {
       "command": "npx",
-      "args": ["-y", "@brs98/linear-mcp"],
+      "args": ["-y", "@brs98/linear-mcp", "--tools=issues,projects,teams,users"],
       "env": {
         "LINEAR_API_KEY": "<your-linear-api-key>"
       }
@@ -70,6 +70,9 @@ npx @brs98/linear-mcp --tools=issues,comments
 
 # Only include project and team tools
 npx @brs98/linear-mcp --tools=projects,teams
+
+# Only include user tools
+npx @brs98/linear-mcp --tools=users
 ```
 
 #### CLI Options Reference:
@@ -82,11 +85,13 @@ npx @brs98/linear-mcp --tools=projects,teams
 | `--no-labels`     | Exclude label tools                              |
 | `--no-teams`      | Exclude team tools                               |
 | `--no-projects`   | Exclude project tools                            |
+| `--no-users`      | Exclude user tools                               |
 | `--issues-only`   | Include only issue tools                         |
 | `--comments-only` | Include only comment tools                       |
 | `--labels-only`   | Include only label tools                         |
 | `--teams-only`    | Include only team tools                          |
 | `--projects-only` | Include only project tools                       |
+| `--users-only`    | Include only user tools                          |
 | `--verbose`, `-v` | Enable verbose logging                           |
 | `--help`, `-h`    | Show help message                                |
 
@@ -242,7 +247,6 @@ console.log(issues);
 
 - `getTeamById` - Get a specific team by ID
 - `getTeams` - Get a list of teams
-- `getTeamMembers` - Get members of a team
 
 #### Project Operations - `projects`
 
@@ -252,6 +256,11 @@ console.log(issues);
 - `getProjectUpdates` - Get all project updates
 - `createProject` - Create a new project
 - `createProjectUpdate` - Create a project update
+
+#### User Operations - `users`
+
+- `getUserById` - Get a specific user by ID
+- `getUsers` - Get a list of users
 
 ## Development
 
@@ -306,4 +315,3 @@ This will mount your local directory into the container, allowing you to make ch
 ## License
 
 MIT
-
