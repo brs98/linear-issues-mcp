@@ -13,7 +13,7 @@ You can integrate this MCP server with Claude Desktop or Cursor by adding it to 
   "mcpServers": {
     "linear": {
       "command": "npx",
-      "args": ["-y", "@brs98/linear-mcp", "--tools=issues,projects,teams,users"],
+      "args": ["-y", "@brs98/linear-mcp"],
       "env": {
         "LINEAR_API_KEY": "<your-linear-api-key>"
       }
@@ -39,6 +39,72 @@ To use only specific tools, modify the `args` field:
 ```
 
 This configuration allows Claude and other AI assistants to interact with your Linear instance directly through the MCP server.
+
+### Docker Integration
+
+For Docker-based usage with Claude Desktop or Cursor:
+
+```json
+{
+  "mcpServers": {
+    "linear": {
+      "command": "docker",
+      "args": [
+        "run",
+        "--rm",
+        "-i",
+        "-e",
+        "LINEAR_API_KEY=<your-linear-api-key>",
+        "brs98/linear-mcp:latest"
+      ]
+    }
+  }
+}
+```
+
+You can pass the same CLI options as with the npx version by adding them to the end of the args array:
+
+```json
+{
+  "mcpServers": {
+    "linear": {
+      "command": "docker",
+      "args": [
+        "run",
+        "--rm",
+        "-i",
+        "-e",
+        "LINEAR_API_KEY=<your-linear-api-key>",
+        "brs98/linear-mcp:latest",
+        "--issues-only"
+      ]
+    }
+  }
+}
+```
+
+To use specific tools:
+
+```json
+{
+  "mcpServers": {
+    "linear": {
+      "command": "docker",
+      "args": [
+        "run",
+        "--rm",
+        "-i",
+        "-e",
+        "LINEAR_API_KEY=<your-linear-api-key>",
+        "brs98/linear-mcp:latest",
+        "--tools=issues,projects,teams"
+      ]
+    }
+  }
+}
+```
+
+See [DOCKER-USAGE.md](./DOCKER-USAGE.md) for more details on Docker integration.
 
 ### NPX Usage
 
@@ -171,14 +237,19 @@ npm start -- --issues-only
 
 ```bash
 # Run with Docker (all tools)
-docker run -it --env-file .env @brs98/linear-mcp
+docker run -it -e LINEAR_API_KEY=your_api_key_here brs98/linear-mcp:latest
 
 # Run with Docker (issues only)
-docker run -it --env-file .env @brs98/linear-mcp --issues-only
+docker run -it -e LINEAR_API_KEY=your_api_key_here brs98/linear-mcp:latest --issues-only
+
+# Run with specific tools
+docker run -it -e LINEAR_API_KEY=your_api_key_here brs98/linear-mcp:latest --tools=issues,projects
 
 # Or using docker-compose
 docker-compose up
 ```
+
+If you're building the image locally, replace `brs98/linear-mcp:latest` with your local image name.
 
 ### Connecting to the MCP Server
 

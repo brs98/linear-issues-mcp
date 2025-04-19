@@ -1,6 +1,6 @@
 {
   "name": "@brs98/linear-mcp",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Model Context Protocol server for Linear API",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -16,13 +16,12 @@
     "build": "tsc",
     "start": "node dist/index.js",
     "dev": "tsc -w & node --watch dist/index.js",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "test:ui": "vitest --ui",
     "lint": "eslint . --ext .ts",
     "format": "prettier --write \"src/**/*.ts\"",
     "prepare": "npm run build",
-    "prepublishOnly": "npm run lint"
+    "prepublishOnly": "npm run lint",
+    "publish:npm": "npm publish --access public",
+    "publish:docker": "docker build -t brs98/linear-mcp:latest . && docker push brs98/linear-mcp:latest"
   },
   "keywords": [
     "linear",
@@ -45,11 +44,9 @@
     "@types/node": "^20.10.5",
     "@typescript-eslint/eslint-plugin": "^6.16.0",
     "@typescript-eslint/parser": "^6.16.0",
-    "@vitest/ui": "^1.1.0",
     "eslint": "^8.56.0",
     "prettier": "^3.1.1",
-    "typescript": "^5.3.3",
-    "vitest": "^1.1.0"
+    "typescript": "^5.3.3"
   },
   "engines": {
     "node": ">=18.0.0"

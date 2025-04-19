@@ -14,7 +14,7 @@ const serverPath = resolve(__dirname, '../dist/index.js');
 // Parse command line arguments
 const args = process.argv.slice(2);
 const options = {
-  tools: ['issues', 'comments', 'labels', 'projects', 'teams'], // Default: include all tools
+  tools: ['issues', 'comments', 'labels', 'projects', 'teams', 'users'], // Default: include all tools
   verbose: false
 };
 
