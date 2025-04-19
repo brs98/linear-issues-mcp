@@ -7,6 +7,7 @@ import {
   registerLabelTools,
   registerProjectTools,
   registerTeamTools,
+  registerUserTools,
 } from './tools/index.js';
 import { appConfig } from './config.js';
 
@@ -15,7 +16,7 @@ const getEnabledTools = (): string[] => {
   const toolsEnv = process.env.LINEAR_MCP_TOOLS;
   if (!toolsEnv) {
     // Default: all tools enabled
-    return ['issues', 'comments', 'labels', 'projects', 'teams'];
+    return ['issues', 'comments', 'labels', 'projects', 'teams', 'users'];
   }
   return toolsEnv.split(',').map((t) => t.trim());
 };
@@ -82,6 +83,13 @@ async function main() {
         console.error('Registering team tools...');
       }
       registerTeamTools(server, linearClient);
+    }
+
+    if (enabledTools.includes('users')) {
+      if (verbose) {
+        console.error('Registering user tools...');
+      }
+      registerUserTools(server, linearClient);
     }
 
     // Create transport

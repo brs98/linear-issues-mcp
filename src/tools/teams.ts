@@ -56,7 +56,19 @@ export function registerTeamTools(server: McpServer, linearClient: LinearClient)
           content: [
             {
               type: 'text',
-              text: JSON.stringify(teams, null, 2),
+              text: JSON.stringify(
+                teams.nodes.reduce<
+                  Record<string, { name: string; description: string | undefined }>
+                >((acc, team) => {
+                  acc[team.id] = {
+                    name: team.name,
+                    description: team.description,
+                  };
+                  return acc;
+                }, {}),
+                null,
+                2
+              ),
             },
           ],
         };
@@ -109,4 +121,3 @@ export function registerTeamTools(server: McpServer, linearClient: LinearClient)
     }
   );
 }
-
