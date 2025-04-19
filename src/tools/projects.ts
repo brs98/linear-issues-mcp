@@ -9,7 +9,9 @@ export function registerProjectTools(server: McpServer, linearClient: LinearClie
   server.tool(
     'getProject',
     {
-      projectId: z.custom<Parameters<(typeof linearClient)['project']>[0]>(),
+      projectId: z
+        .custom<Parameters<(typeof linearClient)['project']>[0]>()
+        .describe('ID of the project to fetch'),
     },
     async ({ projectId }) => {
       try {
@@ -40,7 +42,10 @@ export function registerProjectTools(server: McpServer, linearClient: LinearClie
   server.tool(
     'getProjects',
     {
-      filter: z.custom<Parameters<(typeof linearClient)['projects']>[0]>().optional(),
+      filter: z
+        .custom<Parameters<(typeof linearClient)['projects']>[0]>()
+        .optional()
+        .describe('Input for fetching projects'),
     },
     async ({ filter }) => {
       try {
@@ -71,7 +76,9 @@ export function registerProjectTools(server: McpServer, linearClient: LinearClie
   server.tool(
     'getProjectUpdate',
     {
-      projectUpdateId: z.custom<Parameters<(typeof linearClient)['projectUpdate']>[0]>(),
+      projectUpdateId: z
+        .custom<Parameters<(typeof linearClient)['projectUpdate']>[0]>()
+        .describe('ID of the project update to fetch'),
     },
     async ({ projectUpdateId }) => {
       try {
@@ -102,7 +109,10 @@ export function registerProjectTools(server: McpServer, linearClient: LinearClie
   server.tool(
     'getProjectUpdates',
     {
-      variables: z.custom<Parameters<(typeof linearClient)['projectUpdates']>[0]>().optional(),
+      variables: z
+        .custom<Parameters<(typeof linearClient)['projectUpdates']>[0]>()
+        .optional()
+        .describe('Input for fetching project updates'),
     },
     async ({ variables }) => {
       try {
@@ -133,7 +143,9 @@ export function registerProjectTools(server: McpServer, linearClient: LinearClie
   server.tool(
     'createProject',
     {
-      input: z.custom<Parameters<(typeof linearClient)['createProject']>[0]>(),
+      input: z
+        .custom<Parameters<(typeof linearClient)['createProject']>[0]>()
+        .describe('Input for creating a project'),
     },
     async ({ input }) => {
       try {
@@ -164,7 +176,9 @@ export function registerProjectTools(server: McpServer, linearClient: LinearClie
   server.tool(
     'createProjectUpdate',
     {
-      input: z.custom<Parameters<(typeof linearClient)['createProjectUpdate']>[0]>(),
+      input: z
+        .custom<Parameters<(typeof linearClient)['createProjectUpdate']>[0]>()
+        .describe('Input for creating a project update'),
     },
     async ({ input }) => {
       try {

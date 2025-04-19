@@ -1,60 +1,29 @@
 import { z } from 'zod';
-import { LinearClient, LinearTeamsClient } from '../linear/index.js';
+import { LinearClient } from '@linear/sdk';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 
 /**
  * Register team-related tools with the MCP server
  */
 export function registerTeamTools(server: McpServer, linearClient: LinearClient) {
-  // Create teams client
-  const teamsClient = new LinearTeamsClient(linearClient);
-
-  // Get teams
-  server.tool(
-    'getTeams',
-    {},
-    async () => {
-      try {
-        const teams = await teamsClient.getTeams();
-        return {
-          content: [
-            {
-              type: 'text',
-              text: JSON.stringify(teams, null, 2)
-            }
-          ]
-        };
-      } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error);
-        return {
-          content: [
-            {
-              type: 'text',
-              text: `Error fetching teams: ${errorMessage}`
-            }
-          ],
-          isError: true,
-        };
-      }
-    }
-  );
-
   // Get team by ID
   server.tool(
     'getTeamById',
     {
-      id: z.string().describe('The ID of the team')
+      id: z
+        .custom<Parameters<(typeof linearClient)['team']>[0]>()
+        .describe('ID of the team to fetch'),
     },
     async ({ id }) => {
       try {
-        const team = await teamsClient.getTeamById(id);
+        const team = await linearClient.team(id);
         return {
           content: [
             {
               type: 'text',
-              text: JSON.stringify(team, null, 2)
-            }
-          ]
+              text: JSON.stringify(team, null, 2),
+            },
+          ],
         };
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : String(error);
@@ -62,8 +31,8 @@ export function registerTeamTools(server: McpServer, linearClient: LinearClient)
           content: [
             {
               type: 'text',
-              text: `Error fetching team: ${errorMessage}`
-            }
+              text: `Error fetching team: ${errorMessage}`,
+            },
           ],
           isError: true,
         };
@@ -71,62 +40,25 @@ export function registerTeamTools(server: McpServer, linearClient: LinearClient)
     }
   );
 
-  // Create team
+  // Get teams
   server.tool(
-    'createTeam',
+    'getTeams',
     {
-      name: z.string().describe('Name of the team'),
-      key: z.string().describe('Key of the team (used in issue identifiers, e.g., "ENG")'),
-      description: z.string().optional().describe('Description of the team'),
-      icon: z.string().optional().describe('Icon for the team'),
-      color: z.string().optional().describe('Color of the team')
+      variables: z
+        .custom<Parameters<(typeof linearClient)['teams']>[0]>()
+        .optional()
+        .describe('Input for fetching teams'),
     },
-    async (params) => {
+    async ({ variables }) => {
       try {
-        const team = await teamsClient.createTeam(params);
+        const teams = await linearClient.teams(variables);
         return {
           content: [
             {
               type: 'text',
-              text: JSON.stringify(team, null, 2)
-            }
-          ]
-        };
-      } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error);
-        return {
-          content: [
-            {
-              type: 'text',
-              text: `Error creating team: ${errorMessage}`
-            }
+              text: JSON.stringify(teams, null, 2),
+            },
           ],
-          isError: true,
-        };
-      }
-    }
-  );
-
-  // Update team
-  server.tool(
-    'updateTeam',
-    {
-      id: z.string().describe('ID of the team to update'),
-      name: z.string().optional().describe('New name for the team'),
-      description: z.string().optional().describe('New description for the team'),
-      icon: z.string().optional().describe('New icon for the team'),
-      color: z.string().optional().describe('New color for the team')
-    },
-    async (params) => {
-      try {
-        const team = await teamsClient.updateTeam(params);
-        return {
-          content: [
-            {
-              type: 'text',
-              text: JSON.stringify(team, null, 2)
-            }
-          ]
         };
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : String(error);
@@ -134,8 +66,8 @@ export function registerTeamTools(server: McpServer, linearClient: LinearClient)
           content: [
             {
               type: 'text',
-              text: `Error updating team: ${errorMessage}`
-            }
+              text: `Error fetching teams: ${errorMessage}`,
+            },
           ],
           isError: true,
         };
@@ -147,18 +79,20 @@ export function registerTeamTools(server: McpServer, linearClient: LinearClient)
   server.tool(
     'getTeamMembers',
     {
-      teamId: z.string().describe('ID of the team')
+      variables: z
+        .custom<Parameters<(typeof linearClient)['teamMemberships']>[0]>()
+        .describe('Input for fetching team members'),
     },
-    async ({ teamId }) => {
+    async ({ variables }) => {
       try {
-        const members = await teamsClient.getTeamMembers(teamId);
+        const members = await linearClient.teamMemberships(variables);
         return {
           content: [
             {
               type: 'text',
-              text: JSON.stringify(members, null, 2)
-            }
-          ]
+              text: JSON.stringify(members, null, 2),
+            },
+          ],
         };
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : String(error);
@@ -166,12 +100,13 @@ export function registerTeamTools(server: McpServer, linearClient: LinearClient)
           content: [
             {
               type: 'text',
-              text: `Error fetching team members: ${errorMessage}`
-            }
+              text: `Error fetching team members: ${errorMessage}`,
+            },
           ],
           isError: true,
         };
       }
     }
   );
-} 
+}
+

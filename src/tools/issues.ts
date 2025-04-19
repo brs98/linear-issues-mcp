@@ -151,7 +151,9 @@ export function registerIssueTools(server: McpServer, linearClient: LinearClient
   server.tool(
     'deleteIssue',
     {
-      issueId: z.custom<Parameters<(typeof linearClient)['deleteIssue']>[0]>(),
+      issueId: z
+        .custom<Parameters<(typeof linearClient)['deleteIssue']>[0]>()
+        .describe('ID or identifier of the issue to delete'),
     },
     async ({ issueId }) => {
       try {

@@ -7,30 +7,39 @@ import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
  */
 export function registerLabelTools(server: McpServer, linearClient: LinearClient) {
   // Get labels
-  server.tool('getLabels', {}, async () => {
-    try {
-      const labels = await linearClient.issueLabels();
-      return {
-        content: [
-          {
-            type: 'text',
-            text: JSON.stringify(labels, null, 2),
-          },
-        ],
-      };
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : String(error);
-      return {
-        content: [
-          {
-            type: 'text',
-            text: `Error fetching labels: ${errorMessage}`,
-          },
-        ],
-        isError: true,
-      };
+  server.tool(
+    'getLabels',
+    {
+      variables: z
+        .custom<Parameters<(typeof linearClient)['issueLabels']>[0]>()
+        .optional()
+        .describe('Input for fetching labels'),
+    },
+    async () => {
+      try {
+        const labels = await linearClient.issueLabels();
+        return {
+          content: [
+            {
+              type: 'text',
+              text: JSON.stringify(labels, null, 2),
+            },
+          ],
+        };
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        return {
+          content: [
+            {
+              type: 'text',
+              text: `Error fetching labels: ${errorMessage}`,
+            },
+          ],
+          isError: true,
+        };
+      }
     }
-  });
+  );
 
   // Add label to issue
   server.tool(
