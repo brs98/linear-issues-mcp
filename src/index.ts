@@ -5,7 +5,6 @@ import {
   registerIssueTools,
   registerCommentTools,
   registerLabelTools,
-  registerWebhookTools,
   registerProjectTools,
   registerTeamTools,
 } from './tools/index.js';
@@ -16,7 +15,7 @@ const getEnabledTools = (): string[] => {
   const toolsEnv = process.env.LINEAR_MCP_TOOLS;
   if (!toolsEnv) {
     // Default: all tools enabled
-    return ['issues', 'comments', 'labels', 'webhooks', 'projects', 'teams'];
+    return ['issues', 'comments', 'labels', 'projects', 'teams'];
   }
   return toolsEnv.split(',').map((t) => t.trim());
 };
@@ -71,13 +70,6 @@ async function main() {
       registerLabelTools(server, linearClient);
     }
 
-    if (enabledTools.includes('webhooks')) {
-      if (verbose) {
-        console.error('Registering webhook tools...');
-      }
-      registerWebhookTools(server, linearClient);
-    }
-
     if (enabledTools.includes('projects')) {
       if (verbose) {
         console.error('Registering project tools...');
@@ -115,4 +107,3 @@ main().catch((error) => {
   console.error('Unhandled error:', error);
   process.exit(1);
 });
-

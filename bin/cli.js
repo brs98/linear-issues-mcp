@@ -14,7 +14,7 @@ const serverPath = resolve(__dirname, '../dist/index.js');
 // Parse command line arguments
 const args = process.argv.slice(2);
 const options = {
-  tools: ['issues', 'comments', 'labels', 'roadmaps', 'webhooks', 'cycles', 'projects', 'teams'], // Default: include all tools
+  tools: ['issues', 'comments', 'labels', 'projects', 'teams'], // Default: include all tools
   verbose: false
 };
 
@@ -51,15 +51,6 @@ for (let i = 0; i < args.length; i++) {
   else if (arg === '--no-labels') {
     options.tools = options.tools.filter(t => t !== 'labels');
   }
-  else if (arg === '--no-roadmaps') {
-    options.tools = options.tools.filter(t => t !== 'roadmaps');
-  }
-  else if (arg === '--no-webhooks') {
-    options.tools = options.tools.filter(t => t !== 'webhooks');
-  }
-  else if (arg === '--no-cycles') {
-    options.tools = options.tools.filter(t => t !== 'cycles');
-  }
   else if (arg === '--no-projects') {
     options.tools = options.tools.filter(t => t !== 'projects');
   }
@@ -74,15 +65,6 @@ for (let i = 0; i < args.length; i++) {
   }
   else if (arg === '--labels-only') {
     options.tools = ['labels'];
-  }
-  else if (arg === '--roadmaps-only') {
-    options.tools = ['roadmaps'];
-  }
-  else if (arg === '--webhooks-only') {
-    options.tools = ['webhooks'];
-  }
-  else if (arg === '--cycles-only') {
-    options.tools = ['cycles'];
   }
   else if (arg === '--projects-only') {
     options.tools = ['projects'];
@@ -107,17 +89,11 @@ Tool Selection:
   --no-issues            Exclude issue tools
   --no-comments          Exclude comment tools
   --no-labels            Exclude label tools
-  --no-roadmaps          Exclude roadmap tools
-  --no-webhooks          Exclude webhook tools
-  --no-cycles            Exclude cycle tools
   --no-projects          Exclude project tools
   --no-teams             Exclude team tools
   --issues-only          Include only issue tools
   --comments-only        Include only comment tools
   --labels-only          Include only label tools
-  --roadmaps-only        Include only roadmap tools
-  --webhooks-only        Include only webhook tools
-  --cycles-only          Include only cycle tools
   --projects-only        Include only project tools
   --teams-only           Include only team tools
 

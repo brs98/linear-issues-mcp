@@ -29,7 +29,7 @@ To use only specific tools, modify the `args` field:
   "mcpServers": {
     "linear": {
       "command": "npx",
-      "args": ["-y", "@brs98/linear-mcp", "--tools=issues,projects,teams,cycles"],
+      "args": ["-y", "@brs98/linear-mcp", "--tools=issues,projects,teams"],
       "env": {
         "LINEAR_API_KEY": "<your-linear-api-key>"
       }
@@ -70,37 +70,25 @@ npx @brs98/linear-mcp --tools=issues,comments
 
 # Only include project and team tools
 npx @brs98/linear-mcp --tools=projects,teams
-
-# Include all tools except webhooks
-npx @brs98/linear-mcp --no-webhooks
-
-# Only cycle tools for sprint planning
-npx @brs98/linear-mcp --cycles-only
 ```
 
 #### CLI Options Reference:
 
-| Option | Description |
-|--------|-------------|
-| `--tools`, `-t` | Specify which tools to include (comma-separated) |
-| `--no-issues` | Exclude issue tools |
-| `--no-comments` | Exclude comment tools |
-| `--no-labels` | Exclude label tools |
-| `--no-teams` | Exclude team tools |
-| `--no-projects` | Exclude project tools |
-| `--no-cycles` | Exclude cycle tools |
-| `--no-roadmaps` | Exclude roadmap tools |
-| `--no-webhooks` | Exclude webhook tools |
-| `--issues-only` | Include only issue tools |
-| `--comments-only` | Include only comment tools |
-| `--labels-only` | Include only label tools |
-| `--teams-only` | Include only team tools |
-| `--projects-only` | Include only project tools |
-| `--cycles-only` | Include only cycle tools |
-| `--roadmaps-only` | Include only roadmap tools |
-| `--webhooks-only` | Include only webhook tools |
-| `--verbose`, `-v` | Enable verbose logging |
-| `--help`, `-h` | Show help message |
+| Option            | Description                                      |
+| ----------------- | ------------------------------------------------ |
+| `--tools`, `-t`   | Specify which tools to include (comma-separated) |
+| `--no-issues`     | Exclude issue tools                              |
+| `--no-comments`   | Exclude comment tools                            |
+| `--no-labels`     | Exclude label tools                              |
+| `--no-teams`      | Exclude team tools                               |
+| `--no-projects`   | Exclude project tools                            |
+| `--issues-only`   | Include only issue tools                         |
+| `--comments-only` | Include only comment tools                       |
+| `--labels-only`   | Include only label tools                         |
+| `--teams-only`    | Include only team tools                          |
+| `--projects-only` | Include only project tools                       |
+| `--verbose`, `-v` | Enable verbose logging                           |
+| `--help`, `-h`    | Show help message                                |
 
 ## Features
 
@@ -110,9 +98,6 @@ npx @brs98/linear-mcp --cycles-only
 - Work with issue comments
 - Team management operations
 - Project management capabilities
-- Sprint/cycle planning and tracking
-- Roadmap management
-- Webhook configuration
 - Full integration with Linear's GraphQL API
 
 ## Requirements
@@ -209,8 +194,8 @@ const transport = new StdioClientTransport({
   command: 'npx',
   args: ['-y', '@brs98/linear-mcp'], // Run directly via npx
   env: {
-    LINEAR_API_KEY: 'your_linear_api_key_here'
-  }
+    LINEAR_API_KEY: 'your_linear_api_key_here',
+  },
 });
 
 const client = new Client({
@@ -224,8 +209,8 @@ await client.connect(transport);
 const issues = await client.callTool({
   name: 'getIssues',
   arguments: {
-    limit: 10
-  }
+    limit: 10,
+  },
 });
 
 console.log(issues);
@@ -274,30 +259,6 @@ console.log(issues);
 - `getProjectIssues` - Get issues associated with a project
 - `addIssueToProject` - Add an issue to a project
 - `removeIssueFromProject` - Remove an issue from a project
-
-#### Cycle Operations - `cycles`
-
-- `getCycles` - Get a list of cycles
-- `getCycleById` - Get a specific cycle by ID
-- `getActiveCycle` - Get the active cycle for a team
-- `createCycle` - Create a new cycle
-- `updateCycle` - Update an existing cycle
-- `getCycleIssues` - Get issues in a cycle
-- `addIssueToCycle` - Add an issue to a cycle
-- `removeIssueFromCycle` - Remove an issue from a cycle
-
-#### Roadmap Operations - `roadmaps`
-
-- `getRoadmaps` - Get a list of roadmaps
-- `getRoadmapById` - Get a specific roadmap by ID
-- `createRoadmap` - Create a new roadmap
-- `updateRoadmap` - Update an existing roadmap
-
-#### Webhook Operations - `webhooks`
-
-- `createWebhook` - Create a new webhook
-- `getWebhooks` - Get a list of webhooks
-- `deleteWebhook` - Delete a webhook
 
 ## Development
 
@@ -352,3 +313,4 @@ This will mount your local directory into the container, allowing you to make ch
 ## License
 
 MIT
+
