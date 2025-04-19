@@ -1,15 +1,14 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import { LinearClient } from './linear/index.js';
-import { 
-  registerIssueTools, 
-  registerCommentTools, 
+import { LinearClient } from '@linear/sdk';
+import {
+  registerIssueTools,
+  registerCommentTools,
   registerLabelTools,
   registerRoadmapTools,
   registerWebhookTools,
-  registerCycleTools,
   registerProjectTools,
-  registerTeamTools
+  registerTeamTools,
 } from './tools/index.js';
 import { appConfig } from './config.js';
 
@@ -20,7 +19,7 @@ const getEnabledTools = (): string[] => {
     // Default: all tools enabled
     return ['issues', 'comments', 'labels', 'roadmaps', 'webhooks', 'cycles', 'projects', 'teams'];
   }
-  return toolsEnv.split(',').map(t => t.trim());
+  return toolsEnv.split(',').map((t) => t.trim());
 };
 
 // Check if verbose logging is enabled
@@ -35,7 +34,7 @@ async function main() {
   try {
     const enabledTools = getEnabledTools();
     const verbose = isVerboseLogging();
-    
+
     if (verbose) {
       console.error('Starting Linear Issues MCP Server with tools:', enabledTools);
     }
@@ -43,7 +42,6 @@ async function main() {
     // Create Linear API client
     const linearClient = new LinearClient({
       apiKey: appConfig.linear.apiKey,
-      baseUrl: appConfig.linear.baseUrl,
     });
 
     // Create MCP server
@@ -59,49 +57,42 @@ async function main() {
       }
       registerIssueTools(server, linearClient);
     }
-    
+
     if (enabledTools.includes('comments')) {
       if (verbose) {
         console.error('Registering comment tools...');
       }
       registerCommentTools(server, linearClient);
     }
-    
+
     if (enabledTools.includes('labels')) {
       if (verbose) {
         console.error('Registering label tools...');
       }
       registerLabelTools(server, linearClient);
     }
-    
+
     if (enabledTools.includes('roadmaps')) {
       if (verbose) {
         console.error('Registering roadmap tools...');
       }
       registerRoadmapTools(server, linearClient);
     }
-    
+
     if (enabledTools.includes('webhooks')) {
       if (verbose) {
         console.error('Registering webhook tools...');
       }
       registerWebhookTools(server, linearClient);
     }
-    
-    if (enabledTools.includes('cycles')) {
-      if (verbose) {
-        console.error('Registering cycle tools...');
-      }
-      registerCycleTools(server, linearClient);
-    }
-    
+
     if (enabledTools.includes('projects')) {
       if (verbose) {
         console.error('Registering project tools...');
       }
       registerProjectTools(server, linearClient);
     }
-    
+
     if (enabledTools.includes('teams')) {
       if (verbose) {
         console.error('Registering team tools...');
@@ -117,7 +108,7 @@ async function main() {
       console.error('Connecting to transport...');
     }
     await server.connect(transport);
-    
+
     if (verbose) {
       console.error('Linear Issues MCP Server started successfully');
     }
@@ -131,4 +122,5 @@ async function main() {
 main().catch((error) => {
   console.error('Unhandled error:', error);
   process.exit(1);
-}); 
+});
+
