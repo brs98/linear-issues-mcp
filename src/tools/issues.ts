@@ -105,12 +105,24 @@ export function registerIssueTools(server: McpServer, linearClient: LinearClient
     },
     async ({ issueData }) => {
       try {
-        const issue = await linearClient.createIssue(issueData);
+        // Handle case where issueData might be a string instead of an object
+        const data = typeof issueData === 'string' ? JSON.parse(issueData) : issueData;
+        const response = await linearClient.createIssue(data);
         return {
           content: [
             {
               type: 'text',
-              text: JSON.stringify(issue, null, 2),
+              text: JSON.stringify({
+                success: response.success,
+                issue: await response.issue?.then((issue) => ({
+                  id: issue.id,
+                  number: issue.number,
+                  title: issue.title,
+                  description: issue.description,
+                  state: issue.state,
+                  priority: issue.priority,
+                })),
+              }),
             },
           ],
         };
@@ -142,7 +154,9 @@ export function registerIssueTools(server: McpServer, linearClient: LinearClient
     },
     async ({ id, updateData }) => {
       try {
-        const updatedIssue = await linearClient.updateIssue(id, updateData);
+        // Handle case where updateData might be a string
+        const data = typeof updateData === 'string' ? JSON.parse(updateData) : updateData;
+        const updatedIssue = await linearClient.updateIssue(id, data);
 
         return {
           content: [
@@ -211,8 +225,12 @@ export function registerIssueTools(server: McpServer, linearClient: LinearClient
     },
     async ({ issues }) => {
       try {
+        // Handle case where issues might be a string
+        const issuesData = typeof issues === 'string' ? JSON.parse(issues) : issues;
         const results = await Promise.all(
-          issues.map((issueData) => linearClient.createIssueBatch(issueData))
+          issuesData.map((issueData: Parameters<(typeof linearClient)['createIssueBatch']>[0]) =>
+            linearClient.createIssueBatch(issueData)
+          )
         );
 
         return {
