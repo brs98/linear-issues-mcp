@@ -9,6 +9,7 @@ export function registerLabelTools(server: McpServer, linearClient: LinearClient
   // Get labels
   server.tool(
     'getLabels',
+    "Retrieves all issue labels available in the Linear workspace. Use this tool when you need to see what labels exist, their IDs, names, and colors. This is useful when you want to add labels to issues or filter issues by label.",
     {
       variables: z
         .custom<Parameters<(typeof linearClient)['issueLabels']>[0]>()
@@ -52,6 +53,7 @@ export function registerLabelTools(server: McpServer, linearClient: LinearClient
   // Add label to issue
   server.tool(
     'addIssueLabel',
+    "Adds a specific label to an existing Linear issue. Use this tool when you need to categorize or tag an issue with a particular label for organization, filtering, or workflow purposes. You must provide both the issueId and labelId (which can be obtained from the getLabels tool).",
     {
       issueId: z
         .custom<Parameters<(typeof linearClient)['issueAddLabel']>[0]>()
@@ -89,6 +91,7 @@ export function registerLabelTools(server: McpServer, linearClient: LinearClient
   // Remove label from issue
   server.tool(
     'removeIssueLabel',
+    "Removes a specific label from an existing Linear issue. Use this tool when an issue has been incorrectly tagged or when the label is no longer relevant to the issue. You must provide both the issueId and labelId to identify which label to remove from which issue.",
     {
       issueId: z
         .custom<Parameters<(typeof linearClient)['issueRemoveLabel']>[0]>()
