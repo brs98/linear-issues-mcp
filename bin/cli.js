@@ -9,7 +9,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 // Path to the built server entry point
-const serverPath = resolve(__dirname, '../dist/index.js');
+const serverPath = resolve(__dirname, '../dist/src/index.js');
 
 // Parse command line arguments
 const args = process.argv.slice(2);
