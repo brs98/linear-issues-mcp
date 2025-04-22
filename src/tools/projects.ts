@@ -1,6 +1,12 @@
 import { z } from 'zod';
 import { LinearClient } from '@linear/sdk';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import {
+  projectCreateInputSchema,
+  projectFilterSchema,
+  projectUpdateCreateInputSchema,
+  projectUpdatesFilterSchema,
+} from '../../zod-schemas.js';
 
 /**
  * Register project-related tools with the MCP server
@@ -8,11 +14,9 @@ import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 export function registerProjectTools(server: McpServer, linearClient: LinearClient) {
   server.tool(
     'getProject',
-    "Retrieves detailed information about a specific Linear project by its ID. Use this tool when you need to look up information about a particular project, such as its name, description, and associated teams. This is useful when you need to reference project details or check project status.",
+    'Retrieves detailed information about a specific Linear project by its ID. Use this tool when you need to look up information about a particular project, such as its name, description, and associated teams. This is useful when you need to reference project details or check project status.',
     {
-      projectId: z
-        .custom<Parameters<(typeof linearClient)['project']>[0]>()
-        .describe('ID of the project to fetch'),
+      projectId: z.string().describe('ID of the project to fetch'),
     },
     async ({ projectId }) => {
       try {
@@ -56,16 +60,13 @@ export function registerProjectTools(server: McpServer, linearClient: LinearClie
 
   server.tool(
     'getProjects',
-    "Retrieves a list of all Linear projects with optional filtering parameters. Use this tool when you need to browse or search through multiple projects. This is helpful for getting an overview of all ongoing projects, finding relevant projects for an issue, or selecting a project for a new task.",
+    'Retrieves a list of all Linear projects with optional filtering parameters. Use this tool when you need to browse or search through multiple projects. This is helpful for getting an overview of all ongoing projects, finding relevant projects for an issue, or selecting a project for a new task.',
     {
-      filter: z
-        .custom<Parameters<(typeof linearClient)['projects']>[0]>()
-        .optional()
-        .describe('Input for fetching projects'),
+      filter: projectFilterSchema.describe('Input for fetching projects'),
     },
     async ({ filter }) => {
       try {
-        const projects = await linearClient.projects(filter);
+        const projects = await linearClient.projects({ filter });
         return {
           content: [
             {
@@ -107,11 +108,9 @@ export function registerProjectTools(server: McpServer, linearClient: LinearClie
 
   server.tool(
     'getProjectUpdate',
-    "Retrieves a specific update/status report for a Linear project by its ID. Use this tool when you need to view the content of a particular project update, such as progress reports, status changes, or milestone announcements. This helps in tracking project progress over time.",
+    'Retrieves a specific update/status report for a Linear project by its ID. Use this tool when you need to view the content of a particular project update, such as progress reports, status changes, or milestone announcements. This helps in tracking project progress over time.',
     {
-      projectUpdateId: z
-        .custom<Parameters<(typeof linearClient)['projectUpdate']>[0]>()
-        .describe('ID of the project update to fetch'),
+      projectUpdateId: z.string().describe('ID of the project update to fetch'),
     },
     async ({ projectUpdateId }) => {
       try {
@@ -150,16 +149,13 @@ export function registerProjectTools(server: McpServer, linearClient: LinearClie
 
   server.tool(
     'getProjectUpdates',
-    "Retrieves a list of updates/status reports for Linear projects with optional filtering. Use this tool when you need to see the history of updates for one or more projects. This helps in tracking project progress, reviewing past status reports, or compiling project history.",
+    'Retrieves a list of updates/status reports for Linear projects with optional filtering. Use this tool when you need to see the history of updates for one or more projects. This helps in tracking project progress, reviewing past status reports, or compiling project history.',
     {
-      variables: z
-        .custom<Parameters<(typeof linearClient)['projectUpdates']>[0]>()
-        .optional()
-        .describe('Input for fetching project updates'),
+      filter: projectUpdatesFilterSchema.describe('Input for fetching project updates'),
     },
-    async ({ variables }) => {
+    async ({ filter }) => {
       try {
-        const projectUpdates = await linearClient.projectUpdates(variables);
+        const projectUpdates = await linearClient.projectUpdates({ filter });
         return {
           content: [
             {
@@ -198,9 +194,7 @@ export function registerProjectTools(server: McpServer, linearClient: LinearClie
     'createProject',
     "Creates a new project in Linear with the provided details. Use this tool when you need to set up a new initiative, feature development, or any work requiring project-level organization. Required fields include 'name' and 'teamIds'. Optional fields include 'description', 'state', 'startDate', and 'targetDate'.",
     {
-      input: z
-        .custom<Parameters<(typeof linearClient)['createProject']>[0]>()
-        .describe('Input for creating a project'),
+      input: projectCreateInputSchema.describe('Input for creating a project'),
     },
     async ({ input }) => {
       try {
@@ -249,9 +243,7 @@ export function registerProjectTools(server: McpServer, linearClient: LinearClie
     'createProjectUpdate',
     "Creates a new status update for an existing Linear project. Use this tool when you need to report progress, document milestone completion, or share important project information with stakeholders. Required fields are 'projectId' and 'body' which contains the update text.",
     {
-      input: z
-        .custom<Parameters<(typeof linearClient)['createProjectUpdate']>[0]>()
-        .describe('Input for creating a project update'),
+      input: projectUpdateCreateInputSchema.describe('Input for creating a project update'),
     },
     async ({ input }) => {
       try {

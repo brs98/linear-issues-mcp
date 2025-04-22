@@ -2003,3 +2003,72 @@ export type CommentCreateInput = {
   /** [INTERNAL] The identifiers of the users subscribing to this comment thread. */
   subscriberIds?: Array<Scalars['String']>;
 };
+
+export type ProjectCreateInput = {
+  /** The color of the project. */
+  color?: Scalars['String'];
+  /** The project content as markdown. */
+  content?: Scalars['String'];
+  /** The ID of the issue from which that project is created. */
+  convertedFromIssueId?: Scalars['String'];
+  /** The description for the project. */
+  description?: Scalars['String'];
+  /** The icon of the project. */
+  icon?: Scalars['String'];
+  /** The identifier in UUID v4 format. If none is provided, the backend will generate one. */
+  id?: Scalars['String'];
+  /** The ID of the last template applied to the project. */
+  lastAppliedTemplateId?: Scalars['String'];
+  /** The identifier of the project lead. */
+  leadId?: Scalars['String'];
+  /** The identifiers of the members of this project. */
+  memberIds?: Array<Scalars['String']>;
+  /** The name of the project. */
+  name: Scalars['String'];
+  /** The priority of the project. 0 = No priority, 1 = Urgent, 2 = High, 3 = Normal, 4 = Low. */
+  priority?: Scalars['Int'];
+  /** The sort order for the project within shared views, when ordered by priority. */
+  prioritySortOrder?: Scalars['Float'];
+  /** The sort order for the project within shared views. */
+  sortOrder?: Scalars['Float'];
+  /** The planned start date of the project. */
+  startDate?: Scalars['TimelessDate'];
+  /** The resolution of the project's start date. */
+  startDateResolution?: DateResolutionType;
+  /** The ID of the project status. */
+  statusId?: Scalars['String'];
+  /** The planned target date of the project. */
+  targetDate?: Scalars['TimelessDate'];
+  /** The resolution of the project's estimated completion date. */
+  targetDateResolution?: DateResolutionType;
+  /** The identifiers of the teams this project is associated with. */
+  teamIds: Array<Scalars['String']>;
+};
+
+export enum DateResolutionType {
+  HalfYear = 'halfYear',
+  Month = 'month',
+  Quarter = 'quarter',
+  Year = 'year',
+}
+
+export type ProjectUpdateCreateInput = {
+  /** The content of the project update in markdown format. */
+  body?: Scalars['String'];
+  /** [Internal] The content of the project update as a Prosemirror document. */
+  bodyData?: Scalars['JSON'];
+  /** The health of the project at the time of the update. */
+  health?: ProjectUpdateHealthType;
+  /** The identifier. If none is provided, the backend will generate one. */
+  id?: Scalars['String'];
+  /** Whether the diff between the current update and the previous one should be hidden. */
+  isDiffHidden?: Scalars['Boolean'];
+  /** The project to associate the project update with. */
+  projectId: Scalars['String'];
+};
+
+export enum ProjectUpdateHealthType {
+  AtRisk = 'atRisk',
+  OffTrack = 'offTrack',
+  OnTrack = 'onTrack',
+}

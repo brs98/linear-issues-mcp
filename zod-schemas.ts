@@ -47,6 +47,8 @@ import {
   CyclePeriod,
   SlaStatus,
   SLADayCountType,
+  DateResolutionType,
+  ProjectUpdateHealthType,
 } from './types.js';
 
 export const scalarsSchema = z.object({
@@ -502,6 +504,41 @@ export const commentCreateInputSchema = z.object({
   projectUpdateId: scalarsSchema.shape.String.optional(),
   quotedText: scalarsSchema.shape.String.optional(),
   subscriberIds: z.array(scalarsSchema.shape.String).optional(),
+});
+
+export const dateResolutionTypeSchema = z.nativeEnum(DateResolutionType);
+
+export const projectUpdateHealthTypeSchema = z.nativeEnum(ProjectUpdateHealthType);
+
+export const projectCreateInputSchema = z.object({
+  color: scalarsSchema.shape.String.optional(),
+  content: scalarsSchema.shape.String.optional(),
+  convertedFromIssueId: scalarsSchema.shape.String.optional(),
+  description: scalarsSchema.shape.String.optional(),
+  icon: scalarsSchema.shape.String.optional(),
+  id: scalarsSchema.shape.String.optional(),
+  lastAppliedTemplateId: scalarsSchema.shape.String.optional(),
+  leadId: scalarsSchema.shape.String.optional(),
+  memberIds: z.array(scalarsSchema.shape.String).optional(),
+  name: scalarsSchema.shape.String,
+  priority: scalarsSchema.shape.Int.optional(),
+  prioritySortOrder: scalarsSchema.shape.Float.optional(),
+  sortOrder: scalarsSchema.shape.Float.optional(),
+  startDate: scalarsSchema.shape.TimelessDate.optional(),
+  startDateResolution: dateResolutionTypeSchema.optional(),
+  statusId: scalarsSchema.shape.String.optional(),
+  targetDate: scalarsSchema.shape.TimelessDate.optional(),
+  targetDateResolution: dateResolutionTypeSchema.optional(),
+  teamIds: z.array(scalarsSchema.shape.String),
+});
+
+export const projectUpdateCreateInputSchema = z.object({
+  body: scalarsSchema.shape.String.optional(),
+  bodyData: scalarsSchema.shape.JSON.optional(),
+  health: projectUpdateHealthTypeSchema.optional(),
+  id: scalarsSchema.shape.String.optional(),
+  isDiffHidden: scalarsSchema.shape.Boolean.optional(),
+  projectId: scalarsSchema.shape.String,
 });
 
 export const attachmentFilterSchema: z.ZodSchema<AttachmentFilter> = z.lazy(() =>
