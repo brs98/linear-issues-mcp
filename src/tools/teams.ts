@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { LinearClient } from '@linear/sdk';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import { teamFilterSchema } from '../../zod-schemas.js';
 
 /**
  * Register team-related tools with the MCP server
@@ -11,9 +12,7 @@ export function registerTeamTools(server: McpServer, linearClient: LinearClient)
     'getTeamById',
     "Retrieves detailed information about a specific Linear team by its ID. Use this tool when you need to look up a team's details, such as its name, description, and member list. This is useful when creating issues that need to be assigned to a specific team or when you need to reference team-specific information.",
     {
-      id: z
-        .custom<Parameters<(typeof linearClient)['team']>[0]>()
-        .describe('ID of the team to fetch'),
+      id: z.string().describe('ID of the team to fetch'),
     },
     async ({ id }) => {
       try {
@@ -58,16 +57,13 @@ export function registerTeamTools(server: McpServer, linearClient: LinearClient)
   // Get teams
   server.tool(
     'getTeams',
-    "Retrieves a list of all teams in the Linear workspace with optional filtering parameters. Use this tool when you need to browse or search through all available teams. This is helpful when you need to identify the appropriate team for issue assignment, determine which teams exist in the organization, or find team IDs for other operations.",
+    'Retrieves a list of all teams in the Linear workspace with optional filtering parameters. Use this tool when you need to browse or search through all available teams. This is helpful when you need to identify the appropriate team for issue assignment, determine which teams exist in the organization, or find team IDs for other operations.',
     {
-      variables: z
-        .custom<Parameters<(typeof linearClient)['teams']>[0]>()
-        .optional()
-        .describe('Input for fetching teams'),
+      filter: teamFilterSchema.describe('Input for fetching teams'),
     },
-    async ({ variables }) => {
+    async ({ filter }) => {
       try {
-        const teams = await linearClient.teams(variables);
+        const teams = await linearClient.teams({ filter });
         return {
           content: [
             {
