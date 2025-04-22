@@ -1,6 +1,6 @@
-import { z } from 'zod';
 import { LinearClient } from '@linear/sdk';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import { commentCreateInputSchema, commentFilterSchema } from '../../zod-schemas.js';
 
 /**
  * Register comment-related tools with the MCP server
@@ -9,15 +9,13 @@ export function registerCommentTools(server: McpServer, linearClient: LinearClie
   // Get comments
   server.tool(
     'getComments',
-    "Retrieves comments associated with Linear issues based on specified filters. Use this tool when you need to read discussion threads, feedback, or updates on issues. You can filter by issueId to get comments for a specific issue, or use other filtering parameters to get comments across multiple issues.",
+    'Retrieves comments associated with Linear issues based on specified filters. Use this tool when you need to read discussion threads, feedback, or updates on issues. You can filter by issueId to get comments for a specific issue, or use other filtering parameters to get comments across multiple issues.',
     {
-      variables: z
-        .custom<Parameters<(typeof linearClient)['comments']>[0]>()
-        .describe('Input for fetching comments'),
+      filter: commentFilterSchema.describe('Input for fetching comments'),
     },
-    async ({ variables }) => {
+    async ({ filter }) => {
       try {
-        const comments = await linearClient.comments(variables);
+        const comments = await linearClient.comments({ filter });
         return {
           content: [
             {
@@ -56,9 +54,7 @@ export function registerCommentTools(server: McpServer, linearClient: LinearClie
     'createComment',
     "Adds a new comment to an existing Linear issue. Use this tool when you need to provide feedback, updates, or additional information on an issue. Required fields are 'issueId' and 'body' which contains the comment text. You can use Markdown formatting in the comment body.",
     {
-      input: z
-        .custom<Parameters<(typeof linearClient)['createComment']>[0]>()
-        .describe('Input for creating a comment'),
+      input: commentCreateInputSchema.describe('Input for creating a comment'),
     },
     async ({ input }) => {
       try {

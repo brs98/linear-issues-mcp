@@ -1968,3 +1968,38 @@ export type IssueBatchCreateInput = {
   /** The issues to create. */
   issues: Array<IssueCreateInput>;
 };
+
+export type CommentCreateInput = {
+  /** The comment content in markdown format. */
+  body?: Scalars['String'];
+  /** [Internal] The comment content as a Prosemirror document. */
+  bodyData?: Scalars['JSON'];
+  /** Create comment as a user with the provided name. This option is only available to OAuth applications creating comments in `actor=application` mode. */
+  createAsUser?: Scalars['String'];
+  /** Flag to indicate this comment should be created on the issue's synced Slack comment thread. If no synced Slack comment thread exists, the mutation will fail. */
+  createOnSyncedSlackThread?: Scalars['Boolean'];
+  /** The date when the comment was created (e.g. if importing from another system). Must be a date in the past. If none is provided, the backend will generate the time as now. */
+  createdAt?: Scalars['DateTime'];
+  /** Provide an external user avatar URL. Can only be used in conjunction with the `createAsUser` options. This option is only available to OAuth applications creating comments in `actor=application` mode. */
+  displayIconUrl?: Scalars['String'];
+  /** Flag to prevent auto subscription to the issue the comment is created on. */
+  doNotSubscribeToIssue?: Scalars['Boolean'];
+  /** The document content to associate the comment with. */
+  documentContentId?: Scalars['String'];
+  /** The identifier in UUID v4 format. If none is provided, the backend will generate one. */
+  id?: Scalars['String'];
+  /** The initiative update to associate the comment with. */
+  initiativeUpdateId?: Scalars['String'];
+  /** The issue to associate the comment with. */
+  issueId?: Scalars['String'];
+  /** The parent comment under which to nest a current comment. */
+  parentId?: Scalars['String'];
+  /** The post to associate the comment with. */
+  postId?: Scalars['String'];
+  /** The project update to associate the comment with. */
+  projectUpdateId?: Scalars['String'];
+  /** The text that this comment references. Only defined for inline comments. */
+  quotedText?: Scalars['String'];
+  /** [INTERNAL] The identifiers of the users subscribing to this comment thread. */
+  subscriberIds?: Array<Scalars['String']>;
+};

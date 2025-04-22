@@ -485,6 +485,25 @@ export const issueBatchCreateInputSchema = z.object({
   issues: z.array(issueCreateInputSchema),
 });
 
+export const commentCreateInputSchema = z.object({
+  body: scalarsSchema.shape.String.optional(),
+  bodyData: scalarsSchema.shape.JSON.optional(),
+  createAsUser: scalarsSchema.shape.String.optional(),
+  createOnSyncedSlackThread: scalarsSchema.shape.Boolean.optional(),
+  createdAt: scalarsSchema.shape.DateTime.optional(),
+  displayIconUrl: scalarsSchema.shape.String.optional(),
+  doNotSubscribeToIssue: scalarsSchema.shape.Boolean.optional(),
+  documentContentId: scalarsSchema.shape.String.optional(),
+  id: scalarsSchema.shape.String.optional(),
+  initiativeUpdateId: scalarsSchema.shape.String.optional(),
+  issueId: scalarsSchema.shape.String.optional(),
+  parentId: scalarsSchema.shape.String.optional(),
+  postId: scalarsSchema.shape.String.optional(),
+  projectUpdateId: scalarsSchema.shape.String.optional(),
+  quotedText: scalarsSchema.shape.String.optional(),
+  subscriberIds: z.array(scalarsSchema.shape.String).optional(),
+});
+
 export const attachmentFilterSchema: z.ZodSchema<AttachmentFilter> = z.lazy(() =>
   z.object({
     and: z.array(attachmentFilterSchema).optional(),
