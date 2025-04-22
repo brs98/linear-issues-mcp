@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { LinearClient } from '@linear/sdk';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import { userFilterSchema } from '../../zod-schemas.js';
 
 /**
  * Register user-related tools with the MCP server
@@ -8,11 +9,9 @@ import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 export function registerUserTools(server: McpServer, linearClient: LinearClient) {
   server.tool(
     'getUserById',
-    "Retrieves detailed information about a specific Linear user by their ID. Use this tool when you need to look up information about a particular user, such as their name, email, display name, or team memberships. This is useful when assigning issues, identifying team members, or determining user roles.",
+    'Retrieves detailed information about a specific Linear user by their ID. Use this tool when you need to look up information about a particular user, such as their name, email, display name, or team memberships. This is useful when assigning issues, identifying team members, or determining user roles.',
     {
-      userId: z
-        .custom<Parameters<(typeof linearClient)['user']>[0]>()
-        .describe('ID of the user to fetch'),
+      userId: z.string().describe('ID of the user to fetch'),
     },
     async ({ userId }) => {
       try {
@@ -42,16 +41,13 @@ export function registerUserTools(server: McpServer, linearClient: LinearClient)
 
   server.tool(
     'getUsers',
-    "Retrieves a list of all users in the Linear workspace with optional filtering parameters. Use this tool when you need to browse or search through all available users. This is helpful when you need to identify users for issue assignment, find team members, or look up user IDs for other operations.",
+    'Retrieves a list of all users in the Linear workspace with optional filtering parameters. Use this tool when you need to browse or search through all available users. This is helpful when you need to identify users for issue assignment, find team members, or look up user IDs for other operations.',
     {
-      variables: z
-        .custom<Parameters<(typeof linearClient)['users']>[0]>()
-        .optional()
-        .describe('Input for fetching users'),
+      filter: userFilterSchema.describe('Input for fetching users'),
     },
-    async ({ variables }) => {
+    async ({ filter }) => {
       try {
-        const users = await linearClient.users(variables);
+        const users = await linearClient.users({ filter });
         return {
           content: [
             {
