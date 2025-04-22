@@ -36,14 +36,13 @@ import {
   type NullableIssueFilter,
   type CommentCollectionFilter,
   type NullableCommentFilter,
-  type NullableDocumentContentFilter,
   type NullableCustomerFilter,
   type CustomerNeedFilter,
   type ProjectCollectionFilter,
   type DocumentFilter,
+  type NullableDocumentContentFilter,
   type CommentFilter,
   type IssueFilter,
-  type LinearIssueFilter,
   CyclePeriod,
   SlaStatus,
   SLADayCountType,
@@ -114,59 +113,20 @@ export const idComparatorSchema = z.object({
 export const sourceTypeComparatorSchema = z.object({
   contains: scalarsSchema.shape.String.optional(),
   containsIgnoreCase: scalarsSchema.shape.String.optional(),
-  containsIgnoreCaseAndAccent: scalarsSchema.shape.String.optional(),
-  endsWith: scalarsSchema.shape.String.optional(),
   eq: scalarsSchema.shape.String.optional(),
-  eqIgnoreCase: scalarsSchema.shape.String.optional(),
   in: z.array(scalarsSchema.shape.String).optional(),
   neq: scalarsSchema.shape.String.optional(),
-  neqIgnoreCase: scalarsSchema.shape.String.optional(),
   nin: z.array(scalarsSchema.shape.String).optional(),
-  notContains: scalarsSchema.shape.String.optional(),
-  notContainsIgnoreCase: scalarsSchema.shape.String.optional(),
-  notEndsWith: scalarsSchema.shape.String.optional(),
-  notStartsWith: scalarsSchema.shape.String.optional(),
-  startsWith: scalarsSchema.shape.String.optional(),
-  startsWithIgnoreCase: scalarsSchema.shape.String.optional(),
-});
-
-export const nullableStringComparatorSchema = z.object({
-  contains: scalarsSchema.shape.String.optional(),
-  containsIgnoreCase: scalarsSchema.shape.String.optional(),
-  containsIgnoreCaseAndAccent: scalarsSchema.shape.String.optional(),
-  endsWith: scalarsSchema.shape.String.optional(),
-  eq: scalarsSchema.shape.String.optional(),
-  eqIgnoreCase: scalarsSchema.shape.String.optional(),
-  in: z.array(scalarsSchema.shape.String).optional(),
-  neq: scalarsSchema.shape.String.optional(),
-  neqIgnoreCase: scalarsSchema.shape.String.optional(),
-  nin: z.array(scalarsSchema.shape.String).optional(),
-  notContains: scalarsSchema.shape.String.optional(),
-  notContainsIgnoreCase: scalarsSchema.shape.String.optional(),
-  notEndsWith: scalarsSchema.shape.String.optional(),
-  notStartsWith: scalarsSchema.shape.String.optional(),
-  null: scalarsSchema.shape.Boolean.optional(),
-  startsWith: scalarsSchema.shape.String.optional(),
-  startsWithIgnoreCase: scalarsSchema.shape.String.optional(),
 });
 
 export const stringComparatorSchema = z.object({
   contains: scalarsSchema.shape.String.optional(),
   containsIgnoreCase: scalarsSchema.shape.String.optional(),
-  containsIgnoreCaseAndAccent: scalarsSchema.shape.String.optional(),
-  endsWith: scalarsSchema.shape.String.optional(),
   eq: scalarsSchema.shape.String.optional(),
-  eqIgnoreCase: scalarsSchema.shape.String.optional(),
   in: z.array(scalarsSchema.shape.String).optional(),
   neq: scalarsSchema.shape.String.optional(),
-  neqIgnoreCase: scalarsSchema.shape.String.optional(),
   nin: z.array(scalarsSchema.shape.String).optional(),
-  notContains: scalarsSchema.shape.String.optional(),
-  notContainsIgnoreCase: scalarsSchema.shape.String.optional(),
-  notEndsWith: scalarsSchema.shape.String.optional(),
-  notStartsWith: scalarsSchema.shape.String.optional(),
   startsWith: scalarsSchema.shape.String.optional(),
-  startsWithIgnoreCase: scalarsSchema.shape.String.optional(),
 });
 
 export const numberComparatorSchema = z.object({
@@ -180,15 +140,24 @@ export const numberComparatorSchema = z.object({
   nin: z.array(scalarsSchema.shape.Float).optional(),
 });
 
+export const nullableStringComparatorSchema = z.object({
+  contains: scalarsSchema.shape.String.optional(),
+  containsIgnoreCase: scalarsSchema.shape.String.optional(),
+  eq: scalarsSchema.shape.String.optional(),
+  in: z.array(scalarsSchema.shape.String).optional(),
+  neq: scalarsSchema.shape.String.optional(),
+  nin: z.array(scalarsSchema.shape.String).optional(),
+  null: scalarsSchema.shape.Boolean.optional(),
+  startsWith: scalarsSchema.shape.String.optional(),
+});
+
 export const projectMilestoneFilterSchema: z.ZodSchema<ProjectMilestoneFilter> = z.lazy(() =>
   z.object({
     and: z.array(projectMilestoneFilterSchema).optional(),
-    createdAt: dateComparatorSchema.optional(),
     id: idComparatorSchema.optional(),
     name: nullableStringComparatorSchema.optional(),
     or: z.array(projectMilestoneFilterSchema).optional(),
     targetDate: nullableDateComparatorSchema.optional(),
-    updatedAt: dateComparatorSchema.optional(),
   })
 );
 
@@ -196,7 +165,6 @@ export const projectMilestoneCollectionFilterSchema: z.ZodSchema<ProjectMileston
   z.lazy(() =>
     z.object({
       and: z.array(projectMilestoneCollectionFilterSchema).optional(),
-      createdAt: dateComparatorSchema.optional(),
       every: projectMilestoneFilterSchema.optional(),
       id: idComparatorSchema.optional(),
       length: numberComparatorSchema.optional(),
@@ -204,7 +172,6 @@ export const projectMilestoneCollectionFilterSchema: z.ZodSchema<ProjectMileston
       or: z.array(projectMilestoneCollectionFilterSchema).optional(),
       some: projectMilestoneFilterSchema.optional(),
       targetDate: nullableDateComparatorSchema.optional(),
-      updatedAt: dateComparatorSchema.optional(),
     })
   );
 
@@ -216,13 +183,11 @@ export const relationExistsComparatorSchema = z.object({
 export const nullableTemplateFilterSchema: z.ZodSchema<NullableTemplateFilter> = z.lazy(() =>
   z.object({
     and: z.array(nullableTemplateFilterSchema).optional(),
-    createdAt: dateComparatorSchema.optional(),
     id: idComparatorSchema.optional(),
     name: stringComparatorSchema.optional(),
     null: scalarsSchema.shape.Boolean.optional(),
     or: z.array(nullableTemplateFilterSchema).optional(),
     type: stringComparatorSchema.optional(),
-    updatedAt: dateComparatorSchema.optional(),
   })
 );
 
@@ -267,11 +232,9 @@ export const estimateComparatorSchema = z.object({
 export const projectUpdatesFilterSchema: z.ZodSchema<ProjectUpdatesFilter> = z.lazy(() =>
   z.object({
     and: z.array(projectUpdatesFilterSchema).optional(),
-    createdAt: dateComparatorSchema.optional(),
     health: stringComparatorSchema.optional(),
     id: idComparatorSchema.optional(),
     or: z.array(projectUpdatesFilterSchema).optional(),
-    updatedAt: dateComparatorSchema.optional(),
   })
 );
 
@@ -279,14 +242,12 @@ export const projectUpdatesCollectionFilterSchema: z.ZodSchema<ProjectUpdatesCol
   z.lazy(() =>
     z.object({
       and: z.array(projectUpdatesCollectionFilterSchema).optional(),
-      createdAt: dateComparatorSchema.optional(),
       every: projectUpdatesFilterSchema.optional(),
       health: stringComparatorSchema.optional(),
       id: idComparatorSchema.optional(),
       length: numberComparatorSchema.optional(),
       or: z.array(projectUpdatesCollectionFilterSchema).optional(),
       some: projectUpdatesFilterSchema.optional(),
-      updatedAt: dateComparatorSchema.optional(),
     })
   );
 
@@ -299,40 +260,32 @@ export const nullableProjectMilestoneFilterSchema: z.ZodSchema<NullableProjectMi
   z.lazy(() =>
     z.object({
       and: z.array(nullableProjectMilestoneFilterSchema).optional(),
-      createdAt: dateComparatorSchema.optional(),
       id: idComparatorSchema.optional(),
       name: nullableStringComparatorSchema.optional(),
       null: scalarsSchema.shape.Boolean.optional(),
       or: z.array(nullableProjectMilestoneFilterSchema).optional(),
       targetDate: nullableDateComparatorSchema.optional(),
-      updatedAt: dateComparatorSchema.optional(),
     })
   );
 
 export const reactionFilterSchema: z.ZodSchema<ReactionFilter> = z.lazy(() =>
   z.object({
     and: z.array(reactionFilterSchema).optional(),
-    createdAt: dateComparatorSchema.optional(),
-    customEmojiId: idComparatorSchema.optional(),
     emoji: stringComparatorSchema.optional(),
     id: idComparatorSchema.optional(),
     or: z.array(reactionFilterSchema).optional(),
-    updatedAt: dateComparatorSchema.optional(),
   })
 );
 
 export const reactionCollectionFilterSchema: z.ZodSchema<ReactionCollectionFilter> = z.lazy(() =>
   z.object({
     and: z.array(reactionCollectionFilterSchema).optional(),
-    createdAt: dateComparatorSchema.optional(),
-    customEmojiId: idComparatorSchema.optional(),
     emoji: stringComparatorSchema.optional(),
     every: reactionFilterSchema.optional(),
     id: idComparatorSchema.optional(),
     length: numberComparatorSchema.optional(),
     or: z.array(reactionCollectionFilterSchema).optional(),
     some: reactionFilterSchema.optional(),
-    updatedAt: dateComparatorSchema.optional(),
   })
 );
 
@@ -365,21 +318,11 @@ export const sourceMetadataComparatorSchema = z.object({
 
 export const stringItemComparatorSchema = z.object({
   contains: scalarsSchema.shape.String.optional(),
-  containsIgnoreCase: scalarsSchema.shape.String.optional(),
-  containsIgnoreCaseAndAccent: scalarsSchema.shape.String.optional(),
-  endsWith: scalarsSchema.shape.String.optional(),
   eq: scalarsSchema.shape.String.optional(),
-  eqIgnoreCase: scalarsSchema.shape.String.optional(),
   in: z.array(scalarsSchema.shape.String).optional(),
   neq: scalarsSchema.shape.String.optional(),
-  neqIgnoreCase: scalarsSchema.shape.String.optional(),
   nin: z.array(scalarsSchema.shape.String).optional(),
-  notContains: scalarsSchema.shape.String.optional(),
-  notContainsIgnoreCase: scalarsSchema.shape.String.optional(),
-  notEndsWith: scalarsSchema.shape.String.optional(),
-  notStartsWith: scalarsSchema.shape.String.optional(),
   startsWith: scalarsSchema.shape.String.optional(),
-  startsWithIgnoreCase: scalarsSchema.shape.String.optional(),
 });
 
 export const stringArrayComparatorSchema = z.object({
@@ -392,14 +335,12 @@ export const customerStatusFilterSchema: z.ZodSchema<CustomerStatusFilter> = z.l
   z.object({
     and: z.array(customerStatusFilterSchema).optional(),
     color: stringComparatorSchema.optional(),
-    createdAt: dateComparatorSchema.optional(),
     description: stringComparatorSchema.optional(),
     id: idComparatorSchema.optional(),
     name: stringComparatorSchema.optional(),
     or: z.array(customerStatusFilterSchema).optional(),
     position: numberComparatorSchema.optional(),
     type: stringComparatorSchema.optional(),
-    updatedAt: dateComparatorSchema.optional(),
   })
 );
 
@@ -407,13 +348,11 @@ export const customerTierFilterSchema: z.ZodSchema<CustomerTierFilter> = z.lazy(
   z.object({
     and: z.array(customerTierFilterSchema).optional(),
     color: stringComparatorSchema.optional(),
-    createdAt: dateComparatorSchema.optional(),
     description: stringComparatorSchema.optional(),
     id: idComparatorSchema.optional(),
     name: stringComparatorSchema.optional(),
     or: z.array(customerTierFilterSchema).optional(),
     position: numberComparatorSchema.optional(),
-    updatedAt: dateComparatorSchema.optional(),
   })
 );
 
@@ -422,65 +361,33 @@ export const sLADayCountTypeSchema = z.nativeEnum(SLADayCountType);
 export const issueCreateInputSchema = z.object({
   assigneeId: scalarsSchema.shape.String.optional(),
   completedAt: scalarsSchema.shape.DateTime.optional(),
-  createAsUser: scalarsSchema.shape.String.optional(),
-  createdAt: scalarsSchema.shape.DateTime.optional(),
-  cycleId: scalarsSchema.shape.String.optional(),
   description: scalarsSchema.shape.String.optional(),
-  descriptionData: scalarsSchema.shape.JSON.optional(),
-  displayIconUrl: scalarsSchema.shape.String.optional(),
   dueDate: scalarsSchema.shape.TimelessDate.optional(),
   estimate: scalarsSchema.shape.Int.optional(),
   id: scalarsSchema.shape.String.optional(),
   labelIds: z.array(scalarsSchema.shape.String).optional(),
-  lastAppliedTemplateId: scalarsSchema.shape.String.optional(),
   parentId: scalarsSchema.shape.String.optional(),
-  preserveSortOrderOnCreate: scalarsSchema.shape.Boolean.optional(),
   priority: scalarsSchema.shape.Int.optional(),
-  prioritySortOrder: scalarsSchema.shape.Float.optional(),
   projectId: scalarsSchema.shape.String.optional(),
-  projectMilestoneId: scalarsSchema.shape.String.optional(),
-  referenceCommentId: scalarsSchema.shape.String.optional(),
-  slaBreachesAt: scalarsSchema.shape.DateTime.optional(),
-  slaType: sLADayCountTypeSchema.optional(),
-  sortOrder: scalarsSchema.shape.Float.optional(),
-  sourceCommentId: scalarsSchema.shape.String.optional(),
-  sourcePullRequestCommentId: scalarsSchema.shape.String.optional(),
   stateId: scalarsSchema.shape.String.optional(),
-  subIssueSortOrder: scalarsSchema.shape.Float.optional(),
   subscriberIds: z.array(scalarsSchema.shape.String).optional(),
   teamId: scalarsSchema.shape.String,
-  templateId: scalarsSchema.shape.String.optional(),
   title: scalarsSchema.shape.String.optional(),
 });
 
 export const issueUpdateInputSchema = z.object({
-  addedLabelIds: z.array(scalarsSchema.shape.String).optional(),
   assigneeId: scalarsSchema.shape.String.optional(),
-  autoClosedByParentClosing: scalarsSchema.shape.Boolean.optional(),
-  cycleId: scalarsSchema.shape.String.optional(),
   description: scalarsSchema.shape.String.optional(),
-  descriptionData: scalarsSchema.shape.JSON.optional(),
   dueDate: scalarsSchema.shape.TimelessDate.optional(),
   estimate: scalarsSchema.shape.Int.optional(),
   labelIds: z.array(scalarsSchema.shape.String).optional(),
-  lastAppliedTemplateId: scalarsSchema.shape.String.optional(),
   parentId: scalarsSchema.shape.String.optional(),
   priority: scalarsSchema.shape.Int.optional(),
-  prioritySortOrder: scalarsSchema.shape.Float.optional(),
   projectId: scalarsSchema.shape.String.optional(),
-  projectMilestoneId: scalarsSchema.shape.String.optional(),
-  removedLabelIds: z.array(scalarsSchema.shape.String).optional(),
-  slaBreachesAt: scalarsSchema.shape.DateTime.optional(),
-  slaType: sLADayCountTypeSchema.optional(),
-  snoozedById: scalarsSchema.shape.String.optional(),
-  snoozedUntilAt: scalarsSchema.shape.DateTime.optional(),
-  sortOrder: scalarsSchema.shape.Float.optional(),
   stateId: scalarsSchema.shape.String.optional(),
-  subIssueSortOrder: scalarsSchema.shape.Float.optional(),
   subscriberIds: z.array(scalarsSchema.shape.String).optional(),
   teamId: scalarsSchema.shape.String.optional(),
   title: scalarsSchema.shape.String.optional(),
-  trashed: scalarsSchema.shape.Boolean.optional(),
 });
 
 export const issueBatchCreateInputSchema = z.object({
@@ -489,69 +396,43 @@ export const issueBatchCreateInputSchema = z.object({
 
 export const commentCreateInputSchema = z.object({
   body: scalarsSchema.shape.String.optional(),
-  bodyData: scalarsSchema.shape.JSON.optional(),
-  createAsUser: scalarsSchema.shape.String.optional(),
-  createOnSyncedSlackThread: scalarsSchema.shape.Boolean.optional(),
-  createdAt: scalarsSchema.shape.DateTime.optional(),
-  displayIconUrl: scalarsSchema.shape.String.optional(),
-  doNotSubscribeToIssue: scalarsSchema.shape.Boolean.optional(),
-  documentContentId: scalarsSchema.shape.String.optional(),
   id: scalarsSchema.shape.String.optional(),
-  initiativeUpdateId: scalarsSchema.shape.String.optional(),
   issueId: scalarsSchema.shape.String.optional(),
   parentId: scalarsSchema.shape.String.optional(),
-  postId: scalarsSchema.shape.String.optional(),
-  projectUpdateId: scalarsSchema.shape.String.optional(),
-  quotedText: scalarsSchema.shape.String.optional(),
-  subscriberIds: z.array(scalarsSchema.shape.String).optional(),
+});
+
+export const projectCreateInputSchema = z.object({
+  description: scalarsSchema.shape.String.optional(),
+  id: scalarsSchema.shape.String.optional(),
+  leadId: scalarsSchema.shape.String.optional(),
+  memberIds: z.array(scalarsSchema.shape.String).optional(),
+  name: scalarsSchema.shape.String,
+  priority: scalarsSchema.shape.Int.optional(),
+  startDate: scalarsSchema.shape.TimelessDate.optional(),
+  statusId: scalarsSchema.shape.String.optional(),
+  targetDate: scalarsSchema.shape.TimelessDate.optional(),
+  teamIds: z.array(scalarsSchema.shape.String),
 });
 
 export const dateResolutionTypeSchema = z.nativeEnum(DateResolutionType);
 
 export const projectUpdateHealthTypeSchema = z.nativeEnum(ProjectUpdateHealthType);
 
-export const projectCreateInputSchema = z.object({
-  color: scalarsSchema.shape.String.optional(),
-  content: scalarsSchema.shape.String.optional(),
-  convertedFromIssueId: scalarsSchema.shape.String.optional(),
-  description: scalarsSchema.shape.String.optional(),
-  icon: scalarsSchema.shape.String.optional(),
-  id: scalarsSchema.shape.String.optional(),
-  lastAppliedTemplateId: scalarsSchema.shape.String.optional(),
-  leadId: scalarsSchema.shape.String.optional(),
-  memberIds: z.array(scalarsSchema.shape.String).optional(),
-  name: scalarsSchema.shape.String,
-  priority: scalarsSchema.shape.Int.optional(),
-  prioritySortOrder: scalarsSchema.shape.Float.optional(),
-  sortOrder: scalarsSchema.shape.Float.optional(),
-  startDate: scalarsSchema.shape.TimelessDate.optional(),
-  startDateResolution: dateResolutionTypeSchema.optional(),
-  statusId: scalarsSchema.shape.String.optional(),
-  targetDate: scalarsSchema.shape.TimelessDate.optional(),
-  targetDateResolution: dateResolutionTypeSchema.optional(),
-  teamIds: z.array(scalarsSchema.shape.String),
-});
-
 export const projectUpdateCreateInputSchema = z.object({
   body: scalarsSchema.shape.String.optional(),
-  bodyData: scalarsSchema.shape.JSON.optional(),
   health: projectUpdateHealthTypeSchema.optional(),
   id: scalarsSchema.shape.String.optional(),
-  isDiffHidden: scalarsSchema.shape.Boolean.optional(),
   projectId: scalarsSchema.shape.String,
 });
 
 export const attachmentFilterSchema: z.ZodSchema<AttachmentFilter> = z.lazy(() =>
   z.object({
     and: z.array(attachmentFilterSchema).optional(),
-    createdAt: dateComparatorSchema.optional(),
     creator: nullableUserFilterSchema.optional(),
     id: idComparatorSchema.optional(),
     or: z.array(attachmentFilterSchema).optional(),
     sourceType: sourceTypeComparatorSchema.optional(),
-    subtitle: nullableStringComparatorSchema.optional(),
     title: stringComparatorSchema.optional(),
-    updatedAt: dateComparatorSchema.optional(),
     url: stringComparatorSchema.optional(),
   })
 );
@@ -559,20 +440,15 @@ export const attachmentFilterSchema: z.ZodSchema<AttachmentFilter> = z.lazy(() =
 export const nullableUserFilterSchema: z.ZodSchema<NullableUserFilter> = z.lazy(() =>
   z.object({
     active: booleanComparatorSchema.optional(),
-    admin: booleanComparatorSchema.optional(),
     and: z.array(nullableUserFilterSchema).optional(),
-    app: booleanComparatorSchema.optional(),
     assignedIssues: issueCollectionFilterSchema.optional(),
-    createdAt: dateComparatorSchema.optional(),
     displayName: stringComparatorSchema.optional(),
     email: stringComparatorSchema.optional(),
     id: idComparatorSchema.optional(),
-    invited: booleanComparatorSchema.optional(),
     isMe: booleanComparatorSchema.optional(),
     name: stringComparatorSchema.optional(),
     null: scalarsSchema.shape.Boolean.optional(),
     or: z.array(nullableUserFilterSchema).optional(),
-    updatedAt: dateComparatorSchema.optional(),
   })
 );
 
@@ -580,18 +456,13 @@ export const attachmentCollectionFilterSchema: z.ZodSchema<AttachmentCollectionF
   () =>
     z.object({
       and: z.array(attachmentCollectionFilterSchema).optional(),
-      createdAt: dateComparatorSchema.optional(),
       creator: nullableUserFilterSchema.optional(),
       every: attachmentFilterSchema.optional(),
       id: idComparatorSchema.optional(),
       length: numberComparatorSchema.optional(),
       or: z.array(attachmentCollectionFilterSchema).optional(),
       some: attachmentFilterSchema.optional(),
-      sourceType: sourceTypeComparatorSchema.optional(),
-      subtitle: nullableStringComparatorSchema.optional(),
       title: stringComparatorSchema.optional(),
-      updatedAt: dateComparatorSchema.optional(),
-      url: stringComparatorSchema.optional(),
     })
 );
 
@@ -600,95 +471,62 @@ export const userFilterSchema: z.ZodSchema<UserFilter> = z.lazy(() =>
     active: booleanComparatorSchema.optional(),
     admin: booleanComparatorSchema.optional(),
     and: z.array(userFilterSchema).optional(),
-    app: booleanComparatorSchema.optional(),
     assignedIssues: issueCollectionFilterSchema.optional(),
-    createdAt: dateComparatorSchema.optional(),
     displayName: stringComparatorSchema.optional(),
     email: stringComparatorSchema.optional(),
     id: idComparatorSchema.optional(),
-    invited: booleanComparatorSchema.optional(),
     isMe: booleanComparatorSchema.optional(),
     name: stringComparatorSchema.optional(),
     or: z.array(userFilterSchema).optional(),
-    updatedAt: dateComparatorSchema.optional(),
   })
 );
 
 export const issueCollectionFilterSchema: z.ZodSchema<IssueCollectionFilter> = z.lazy(() =>
   z.object({
-    addedToCycleAt: nullableDateComparatorSchema.optional(),
-    addedToCyclePeriod: cyclePeriodComparatorSchema.optional(),
     and: z.array(issueCollectionFilterSchema).optional(),
-    archivedAt: nullableDateComparatorSchema.optional(),
     assignee: nullableUserFilterSchema.optional(),
     attachments: attachmentCollectionFilterSchema.optional(),
-    autoArchivedAt: nullableDateComparatorSchema.optional(),
-    autoClosedAt: nullableDateComparatorSchema.optional(),
-    canceledAt: nullableDateComparatorSchema.optional(),
     children: issueCollectionFilterSchema.optional(),
     comments: commentCollectionFilterSchema.optional(),
     completedAt: nullableDateComparatorSchema.optional(),
-    createdAt: dateComparatorSchema.optional(),
     creator: nullableUserFilterSchema.optional(),
-    customerCount: numberComparatorSchema.optional(),
     cycle: nullableCycleFilterSchema.optional(),
     description: nullableStringComparatorSchema.optional(),
     dueDate: nullableTimelessDateComparatorSchema.optional(),
     estimate: estimateComparatorSchema.optional(),
     every: issueFilterSchema.optional(),
-    hasBlockedByRelations: relationExistsComparatorSchema.optional(),
-    hasBlockingRelations: relationExistsComparatorSchema.optional(),
-    hasDuplicateRelations: relationExistsComparatorSchema.optional(),
-    hasRelatedRelations: relationExistsComparatorSchema.optional(),
     id: idComparatorSchema.optional(),
     labels: issueLabelCollectionFilterSchema.optional(),
-    lastAppliedTemplate: nullableTemplateFilterSchema.optional(),
     length: numberComparatorSchema.optional(),
-    needs: customerNeedCollectionFilterSchema.optional(),
     number: numberComparatorSchema.optional(),
     or: z.array(issueCollectionFilterSchema).optional(),
     parent: nullableIssueFilterSchema.optional(),
     priority: nullableNumberComparatorSchema.optional(),
     project: nullableProjectFilterSchema.optional(),
-    projectMilestone: nullableProjectMilestoneFilterSchema.optional(),
-    reactions: reactionCollectionFilterSchema.optional(),
-    recurringIssueTemplate: nullableTemplateFilterSchema.optional(),
-    searchableContent: contentComparatorSchema.optional(),
-    slaStatus: slaStatusComparatorSchema.optional(),
-    snoozedBy: nullableUserFilterSchema.optional(),
-    snoozedUntilAt: nullableDateComparatorSchema.optional(),
     some: issueFilterSchema.optional(),
-    sourceMetadata: sourceMetadataComparatorSchema.optional(),
-    startedAt: nullableDateComparatorSchema.optional(),
     state: workflowStateFilterSchema.optional(),
     subscribers: userCollectionFilterSchema.optional(),
     team: teamFilterSchema.optional(),
     title: stringComparatorSchema.optional(),
-    triagedAt: nullableDateComparatorSchema.optional(),
-    updatedAt: dateComparatorSchema.optional(),
   })
 );
 
 export const initiativeFilterSchema: z.ZodSchema<InitiativeFilter> = z.lazy(() =>
   z.object({
     and: z.array(initiativeFilterSchema).optional(),
-    createdAt: dateComparatorSchema.optional(),
     creator: userFilterSchema.optional(),
     health: stringComparatorSchema.optional(),
-    healthWithAge: stringComparatorSchema.optional(),
     id: idComparatorSchema.optional(),
     name: stringComparatorSchema.optional(),
     or: z.array(initiativeFilterSchema).optional(),
     slugId: stringComparatorSchema.optional(),
     status: stringComparatorSchema.optional(),
-    updatedAt: dateComparatorSchema.optional(),
   })
 );
 
 export const nullableTeamFilterSchema: z.ZodSchema<NullableTeamFilter> = z.lazy(() =>
   z.object({
     and: z.array(nullableTeamFilterSchema).optional(),
-    createdAt: dateComparatorSchema.optional(),
     description: nullableStringComparatorSchema.optional(),
     id: idComparatorSchema.optional(),
     issues: issueCollectionFilterSchema.optional(),
@@ -697,14 +535,12 @@ export const nullableTeamFilterSchema: z.ZodSchema<NullableTeamFilter> = z.lazy(
     null: scalarsSchema.shape.Boolean.optional(),
     or: z.array(nullableTeamFilterSchema).optional(),
     parent: nullableTeamFilterSchema.optional(),
-    updatedAt: dateComparatorSchema.optional(),
   })
 );
 
 export const teamFilterSchema: z.ZodSchema<TeamFilter> = z.lazy(() =>
   z.object({
     and: z.array(teamFilterSchema).optional(),
-    createdAt: dateComparatorSchema.optional(),
     description: nullableStringComparatorSchema.optional(),
     id: idComparatorSchema.optional(),
     issues: issueCollectionFilterSchema.optional(),
@@ -712,20 +548,17 @@ export const teamFilterSchema: z.ZodSchema<TeamFilter> = z.lazy(() =>
     name: stringComparatorSchema.optional(),
     or: z.array(teamFilterSchema).optional(),
     parent: nullableTeamFilterSchema.optional(),
-    updatedAt: dateComparatorSchema.optional(),
   })
 );
 
 export const teamCollectionFilterSchema: z.ZodSchema<TeamCollectionFilter> = z.lazy(() =>
   z.object({
     and: z.array(teamCollectionFilterSchema).optional(),
-    createdAt: dateComparatorSchema.optional(),
     every: teamFilterSchema.optional(),
     id: idComparatorSchema.optional(),
     length: numberComparatorSchema.optional(),
     or: z.array(teamCollectionFilterSchema).optional(),
     some: teamFilterSchema.optional(),
-    updatedAt: dateComparatorSchema.optional(),
   })
 );
 
@@ -733,19 +566,15 @@ export const initiativeCollectionFilterSchema: z.ZodSchema<InitiativeCollectionF
   () =>
     z.object({
       and: z.array(initiativeCollectionFilterSchema).optional(),
-      createdAt: dateComparatorSchema.optional(),
       creator: userFilterSchema.optional(),
       every: initiativeFilterSchema.optional(),
       health: stringComparatorSchema.optional(),
-      healthWithAge: stringComparatorSchema.optional(),
       id: idComparatorSchema.optional(),
       length: numberComparatorSchema.optional(),
       name: stringComparatorSchema.optional(),
       or: z.array(initiativeCollectionFilterSchema).optional(),
-      slugId: stringComparatorSchema.optional(),
       some: initiativeFilterSchema.optional(),
       status: stringComparatorSchema.optional(),
-      updatedAt: dateComparatorSchema.optional(),
     })
 );
 
@@ -754,36 +583,25 @@ export const userCollectionFilterSchema: z.ZodSchema<UserCollectionFilter> = z.l
     active: booleanComparatorSchema.optional(),
     admin: booleanComparatorSchema.optional(),
     and: z.array(userCollectionFilterSchema).optional(),
-    app: booleanComparatorSchema.optional(),
     assignedIssues: issueCollectionFilterSchema.optional(),
-    createdAt: dateComparatorSchema.optional(),
     displayName: stringComparatorSchema.optional(),
     email: stringComparatorSchema.optional(),
     every: userFilterSchema.optional(),
     id: idComparatorSchema.optional(),
-    invited: booleanComparatorSchema.optional(),
     isMe: booleanComparatorSchema.optional(),
     length: numberComparatorSchema.optional(),
     name: stringComparatorSchema.optional(),
     or: z.array(userCollectionFilterSchema).optional(),
     some: userFilterSchema.optional(),
-    updatedAt: dateComparatorSchema.optional(),
   })
 );
 
 export const nullableCycleFilterSchema: z.ZodSchema<NullableCycleFilter> = z.lazy(() =>
   z.object({
     and: z.array(nullableCycleFilterSchema).optional(),
-    completedAt: dateComparatorSchema.optional(),
-    createdAt: dateComparatorSchema.optional(),
     endsAt: dateComparatorSchema.optional(),
     id: idComparatorSchema.optional(),
     isActive: booleanComparatorSchema.optional(),
-    isFuture: booleanComparatorSchema.optional(),
-    isInCooldown: booleanComparatorSchema.optional(),
-    isNext: booleanComparatorSchema.optional(),
-    isPast: booleanComparatorSchema.optional(),
-    isPrevious: booleanComparatorSchema.optional(),
     issues: issueCollectionFilterSchema.optional(),
     name: stringComparatorSchema.optional(),
     null: scalarsSchema.shape.Boolean.optional(),
@@ -791,21 +609,18 @@ export const nullableCycleFilterSchema: z.ZodSchema<NullableCycleFilter> = z.laz
     or: z.array(nullableCycleFilterSchema).optional(),
     startsAt: dateComparatorSchema.optional(),
     team: teamFilterSchema.optional(),
-    updatedAt: dateComparatorSchema.optional(),
   })
 );
 
 export const issueLabelFilterSchema: z.ZodSchema<IssueLabelFilter> = z.lazy(() =>
   z.object({
     and: z.array(issueLabelFilterSchema).optional(),
-    createdAt: dateComparatorSchema.optional(),
     creator: nullableUserFilterSchema.optional(),
     id: idComparatorSchema.optional(),
     name: stringComparatorSchema.optional(),
     or: z.array(issueLabelFilterSchema).optional(),
     parent: issueLabelFilterSchema.optional(),
     team: nullableTeamFilterSchema.optional(),
-    updatedAt: dateComparatorSchema.optional(),
   })
 );
 
@@ -813,7 +628,6 @@ export const issueLabelCollectionFilterSchema: z.ZodSchema<IssueLabelCollectionF
   () =>
     z.object({
       and: z.array(issueLabelCollectionFilterSchema).optional(),
-      createdAt: dateComparatorSchema.optional(),
       creator: nullableUserFilterSchema.optional(),
       every: issueLabelFilterSchema.optional(),
       id: idComparatorSchema.optional(),
@@ -823,36 +637,30 @@ export const issueLabelCollectionFilterSchema: z.ZodSchema<IssueLabelCollectionF
       parent: issueLabelFilterSchema.optional(),
       some: issueLabelFilterSchema.optional(),
       team: nullableTeamFilterSchema.optional(),
-      updatedAt: dateComparatorSchema.optional(),
     })
 );
 
 export const roadmapFilterSchema: z.ZodSchema<RoadmapFilter> = z.lazy(() =>
   z.object({
     and: z.array(roadmapFilterSchema).optional(),
-    createdAt: dateComparatorSchema.optional(),
     creator: userFilterSchema.optional(),
     id: idComparatorSchema.optional(),
     name: stringComparatorSchema.optional(),
     or: z.array(roadmapFilterSchema).optional(),
     slugId: stringComparatorSchema.optional(),
-    updatedAt: dateComparatorSchema.optional(),
   })
 );
 
 export const roadmapCollectionFilterSchema: z.ZodSchema<RoadmapCollectionFilter> = z.lazy(() =>
   z.object({
     and: z.array(roadmapCollectionFilterSchema).optional(),
-    createdAt: dateComparatorSchema.optional(),
     creator: userFilterSchema.optional(),
     every: roadmapFilterSchema.optional(),
     id: idComparatorSchema.optional(),
     length: numberComparatorSchema.optional(),
     name: stringComparatorSchema.optional(),
     or: z.array(roadmapCollectionFilterSchema).optional(),
-    slugId: stringComparatorSchema.optional(),
     some: roadmapFilterSchema.optional(),
-    updatedAt: dateComparatorSchema.optional(),
   })
 );
 
@@ -860,42 +668,27 @@ export const nullableProjectFilterSchema: z.ZodSchema<NullableProjectFilter> = z
   z.object({
     accessibleTeams: teamCollectionFilterSchema.optional(),
     and: z.array(nullableProjectFilterSchema).optional(),
-    canceledAt: nullableDateComparatorSchema.optional(),
     completedAt: nullableDateComparatorSchema.optional(),
-    completedProjectMilestones: projectMilestoneCollectionFilterSchema.optional(),
-    createdAt: dateComparatorSchema.optional(),
     creator: userFilterSchema.optional(),
     customerCount: numberComparatorSchema.optional(),
     hasBlockedByRelations: relationExistsComparatorSchema.optional(),
     hasBlockingRelations: relationExistsComparatorSchema.optional(),
-    hasDependedOnByRelations: relationExistsComparatorSchema.optional(),
-    hasDependsOnRelations: relationExistsComparatorSchema.optional(),
-    hasRelatedRelations: relationExistsComparatorSchema.optional(),
-    hasViolatedRelations: relationExistsComparatorSchema.optional(),
     health: stringComparatorSchema.optional(),
-    healthWithAge: stringComparatorSchema.optional(),
     id: idComparatorSchema.optional(),
     initiatives: initiativeCollectionFilterSchema.optional(),
     issues: issueCollectionFilterSchema.optional(),
-    lastAppliedTemplate: nullableTemplateFilterSchema.optional(),
     lead: nullableUserFilterSchema.optional(),
     members: userCollectionFilterSchema.optional(),
     name: stringComparatorSchema.optional(),
     needs: customerNeedCollectionFilterSchema.optional(),
-    nextProjectMilestone: projectMilestoneFilterSchema.optional(),
     null: scalarsSchema.shape.Boolean.optional(),
     or: z.array(nullableProjectFilterSchema).optional(),
     priority: nullableNumberComparatorSchema.optional(),
     projectMilestones: projectMilestoneCollectionFilterSchema.optional(),
-    projectUpdates: projectUpdatesCollectionFilterSchema.optional(),
-    roadmaps: roadmapCollectionFilterSchema.optional(),
-    searchableContent: contentComparatorSchema.optional(),
     slugId: stringComparatorSchema.optional(),
     startDate: nullableDateComparatorSchema.optional(),
-    state: stringComparatorSchema.optional(),
     status: projectStatusFilterSchema.optional(),
     targetDate: nullableDateComparatorSchema.optional(),
-    updatedAt: dateComparatorSchema.optional(),
   })
 );
 
@@ -904,7 +697,6 @@ export const customerNeedCollectionFilterSchema: z.ZodSchema<CustomerNeedCollect
     z.object({
       and: z.array(customerNeedCollectionFilterSchema).optional(),
       comment: nullableCommentFilterSchema.optional(),
-      createdAt: dateComparatorSchema.optional(),
       customer: nullableCustomerFilterSchema.optional(),
       every: customerNeedFilterSchema.optional(),
       id: idComparatorSchema.optional(),
@@ -914,14 +706,12 @@ export const customerNeedCollectionFilterSchema: z.ZodSchema<CustomerNeedCollect
       priority: numberComparatorSchema.optional(),
       project: nullableProjectFilterSchema.optional(),
       some: customerNeedFilterSchema.optional(),
-      updatedAt: dateComparatorSchema.optional(),
     })
 );
 
 export const projectStatusFilterSchema: z.ZodSchema<ProjectStatusFilter> = z.lazy(() =>
   z.object({
     and: z.array(projectStatusFilterSchema).optional(),
-    createdAt: dateComparatorSchema.optional(),
     description: stringComparatorSchema.optional(),
     id: idComparatorSchema.optional(),
     name: stringComparatorSchema.optional(),
@@ -929,14 +719,12 @@ export const projectStatusFilterSchema: z.ZodSchema<ProjectStatusFilter> = z.laz
     position: numberComparatorSchema.optional(),
     projects: projectCollectionFilterSchema.optional(),
     type: stringComparatorSchema.optional(),
-    updatedAt: dateComparatorSchema.optional(),
   })
 );
 
 export const workflowStateFilterSchema: z.ZodSchema<WorkflowStateFilter> = z.lazy(() =>
   z.object({
     and: z.array(workflowStateFilterSchema).optional(),
-    createdAt: dateComparatorSchema.optional(),
     description: stringComparatorSchema.optional(),
     id: idComparatorSchema.optional(),
     issues: issueCollectionFilterSchema.optional(),
@@ -945,7 +733,6 @@ export const workflowStateFilterSchema: z.ZodSchema<WorkflowStateFilter> = z.laz
     position: numberComparatorSchema.optional(),
     team: teamFilterSchema.optional(),
     type: stringComparatorSchema.optional(),
-    updatedAt: dateComparatorSchema.optional(),
   })
 );
 
@@ -953,13 +740,11 @@ export const nullableProjectUpdateFilterSchema: z.ZodSchema<NullableProjectUpdat
   () =>
     z.object({
       and: z.array(nullableProjectUpdateFilterSchema).optional(),
-      createdAt: dateComparatorSchema.optional(),
       id: idComparatorSchema.optional(),
       null: scalarsSchema.shape.Boolean.optional(),
       or: z.array(nullableProjectUpdateFilterSchema).optional(),
       project: projectFilterSchema.optional(),
       reactions: reactionCollectionFilterSchema.optional(),
-      updatedAt: dateComparatorSchema.optional(),
       user: userFilterSchema.optional(),
     })
 );
@@ -968,94 +753,49 @@ export const projectFilterSchema: z.ZodSchema<ProjectFilter> = z.lazy(() =>
   z.object({
     accessibleTeams: teamCollectionFilterSchema.optional(),
     and: z.array(projectFilterSchema).optional(),
-    canceledAt: nullableDateComparatorSchema.optional(),
     completedAt: nullableDateComparatorSchema.optional(),
-    completedProjectMilestones: projectMilestoneCollectionFilterSchema.optional(),
-    createdAt: dateComparatorSchema.optional(),
     creator: userFilterSchema.optional(),
-    customerCount: numberComparatorSchema.optional(),
-    hasBlockedByRelations: relationExistsComparatorSchema.optional(),
-    hasBlockingRelations: relationExistsComparatorSchema.optional(),
-    hasDependedOnByRelations: relationExistsComparatorSchema.optional(),
-    hasDependsOnRelations: relationExistsComparatorSchema.optional(),
-    hasRelatedRelations: relationExistsComparatorSchema.optional(),
-    hasViolatedRelations: relationExistsComparatorSchema.optional(),
     health: stringComparatorSchema.optional(),
-    healthWithAge: stringComparatorSchema.optional(),
     id: idComparatorSchema.optional(),
-    initiatives: initiativeCollectionFilterSchema.optional(),
     issues: issueCollectionFilterSchema.optional(),
-    lastAppliedTemplate: nullableTemplateFilterSchema.optional(),
     lead: nullableUserFilterSchema.optional(),
     members: userCollectionFilterSchema.optional(),
     name: stringComparatorSchema.optional(),
-    needs: customerNeedCollectionFilterSchema.optional(),
-    nextProjectMilestone: projectMilestoneFilterSchema.optional(),
     or: z.array(projectFilterSchema).optional(),
     priority: nullableNumberComparatorSchema.optional(),
-    projectMilestones: projectMilestoneCollectionFilterSchema.optional(),
-    projectUpdates: projectUpdatesCollectionFilterSchema.optional(),
-    roadmaps: roadmapCollectionFilterSchema.optional(),
-    searchableContent: contentComparatorSchema.optional(),
-    slugId: stringComparatorSchema.optional(),
     startDate: nullableDateComparatorSchema.optional(),
-    state: stringComparatorSchema.optional(),
     status: projectStatusFilterSchema.optional(),
     targetDate: nullableDateComparatorSchema.optional(),
-    updatedAt: dateComparatorSchema.optional(),
   })
 );
 
 export const nullableIssueFilterSchema: z.ZodSchema<NullableIssueFilter> = z.lazy(() =>
   z.object({
-    addedToCycleAt: nullableDateComparatorSchema.optional(),
-    addedToCyclePeriod: cyclePeriodComparatorSchema.optional(),
     and: z.array(nullableIssueFilterSchema).optional(),
-    archivedAt: nullableDateComparatorSchema.optional(),
     assignee: nullableUserFilterSchema.optional(),
     attachments: attachmentCollectionFilterSchema.optional(),
-    autoArchivedAt: nullableDateComparatorSchema.optional(),
-    autoClosedAt: nullableDateComparatorSchema.optional(),
-    canceledAt: nullableDateComparatorSchema.optional(),
     children: issueCollectionFilterSchema.optional(),
     comments: commentCollectionFilterSchema.optional(),
     completedAt: nullableDateComparatorSchema.optional(),
-    createdAt: dateComparatorSchema.optional(),
     creator: nullableUserFilterSchema.optional(),
-    customerCount: numberComparatorSchema.optional(),
     cycle: nullableCycleFilterSchema.optional(),
     description: nullableStringComparatorSchema.optional(),
     dueDate: nullableTimelessDateComparatorSchema.optional(),
     estimate: estimateComparatorSchema.optional(),
-    hasBlockedByRelations: relationExistsComparatorSchema.optional(),
-    hasBlockingRelations: relationExistsComparatorSchema.optional(),
-    hasDuplicateRelations: relationExistsComparatorSchema.optional(),
-    hasRelatedRelations: relationExistsComparatorSchema.optional(),
     id: idComparatorSchema.optional(),
     labels: issueLabelCollectionFilterSchema.optional(),
-    lastAppliedTemplate: nullableTemplateFilterSchema.optional(),
-    needs: customerNeedCollectionFilterSchema.optional(),
     null: scalarsSchema.shape.Boolean.optional(),
     number: numberComparatorSchema.optional(),
     or: z.array(nullableIssueFilterSchema).optional(),
     parent: nullableIssueFilterSchema.optional(),
     priority: nullableNumberComparatorSchema.optional(),
     project: nullableProjectFilterSchema.optional(),
-    projectMilestone: nullableProjectMilestoneFilterSchema.optional(),
     reactions: reactionCollectionFilterSchema.optional(),
-    recurringIssueTemplate: nullableTemplateFilterSchema.optional(),
-    searchableContent: contentComparatorSchema.optional(),
     slaStatus: slaStatusComparatorSchema.optional(),
-    snoozedBy: nullableUserFilterSchema.optional(),
-    snoozedUntilAt: nullableDateComparatorSchema.optional(),
-    sourceMetadata: sourceMetadataComparatorSchema.optional(),
-    startedAt: nullableDateComparatorSchema.optional(),
     state: workflowStateFilterSchema.optional(),
     subscribers: userCollectionFilterSchema.optional(),
     team: teamFilterSchema.optional(),
     title: stringComparatorSchema.optional(),
-    triagedAt: nullableDateComparatorSchema.optional(),
-    updatedAt: dateComparatorSchema.optional(),
   })
 );
 
@@ -1063,7 +803,6 @@ export const commentCollectionFilterSchema: z.ZodSchema<CommentCollectionFilter>
   z.object({
     and: z.array(commentCollectionFilterSchema).optional(),
     body: stringComparatorSchema.optional(),
-    createdAt: dateComparatorSchema.optional(),
     documentContent: nullableDocumentContentFilterSchema.optional(),
     every: commentFilterSchema.optional(),
     id: idComparatorSchema.optional(),
@@ -1075,7 +814,6 @@ export const commentCollectionFilterSchema: z.ZodSchema<CommentCollectionFilter>
     projectUpdate: nullableProjectUpdateFilterSchema.optional(),
     reactions: reactionCollectionFilterSchema.optional(),
     some: commentFilterSchema.optional(),
-    updatedAt: dateComparatorSchema.optional(),
     user: userFilterSchema.optional(),
   })
 );
@@ -1084,8 +822,6 @@ export const nullableCommentFilterSchema: z.ZodSchema<NullableCommentFilter> = z
   z.object({
     and: z.array(nullableCommentFilterSchema).optional(),
     body: stringComparatorSchema.optional(),
-    createdAt: dateComparatorSchema.optional(),
-    documentContent: nullableDocumentContentFilterSchema.optional(),
     id: idComparatorSchema.optional(),
     issue: nullableIssueFilterSchema.optional(),
     needs: customerNeedCollectionFilterSchema.optional(),
@@ -1094,31 +830,14 @@ export const nullableCommentFilterSchema: z.ZodSchema<NullableCommentFilter> = z
     parent: nullableCommentFilterSchema.optional(),
     projectUpdate: nullableProjectUpdateFilterSchema.optional(),
     reactions: reactionCollectionFilterSchema.optional(),
-    updatedAt: dateComparatorSchema.optional(),
     user: userFilterSchema.optional(),
   })
 );
 
-export const nullableDocumentContentFilterSchema: z.ZodSchema<NullableDocumentContentFilter> =
-  z.lazy(() =>
-    z.object({
-      and: z.array(nullableDocumentContentFilterSchema).optional(),
-      createdAt: dateComparatorSchema.optional(),
-      document: documentFilterSchema.optional(),
-      id: idComparatorSchema.optional(),
-      null: scalarsSchema.shape.Boolean.optional(),
-      or: z.array(nullableDocumentContentFilterSchema).optional(),
-      project: projectFilterSchema.optional(),
-      updatedAt: dateComparatorSchema.optional(),
-    })
-  );
-
 export const nullableCustomerFilterSchema: z.ZodSchema<NullableCustomerFilter> = z.lazy(() =>
   z.object({
     and: z.array(nullableCustomerFilterSchema).optional(),
-    createdAt: dateComparatorSchema.optional(),
     domains: stringArrayComparatorSchema.optional(),
-    externalIds: stringArrayComparatorSchema.optional(),
     id: idComparatorSchema.optional(),
     name: stringComparatorSchema.optional(),
     needs: customerNeedCollectionFilterSchema.optional(),
@@ -1126,11 +845,8 @@ export const nullableCustomerFilterSchema: z.ZodSchema<NullableCustomerFilter> =
     or: z.array(nullableCustomerFilterSchema).optional(),
     owner: nullableUserFilterSchema.optional(),
     revenue: numberComparatorSchema.optional(),
-    size: numberComparatorSchema.optional(),
-    slackChannelId: stringComparatorSchema.optional(),
     status: customerStatusFilterSchema.optional(),
     tier: customerTierFilterSchema.optional(),
-    updatedAt: dateComparatorSchema.optional(),
   })
 );
 
@@ -1138,14 +854,12 @@ export const customerNeedFilterSchema: z.ZodSchema<CustomerNeedFilter> = z.lazy(
   z.object({
     and: z.array(customerNeedFilterSchema).optional(),
     comment: nullableCommentFilterSchema.optional(),
-    createdAt: dateComparatorSchema.optional(),
     customer: nullableCustomerFilterSchema.optional(),
     id: idComparatorSchema.optional(),
     issue: nullableIssueFilterSchema.optional(),
     or: z.array(customerNeedFilterSchema).optional(),
     priority: numberComparatorSchema.optional(),
     project: nullableProjectFilterSchema.optional(),
-    updatedAt: dateComparatorSchema.optional(),
   })
 );
 
@@ -1153,68 +867,55 @@ export const projectCollectionFilterSchema: z.ZodSchema<ProjectCollectionFilter>
   z.object({
     accessibleTeams: teamCollectionFilterSchema.optional(),
     and: z.array(projectCollectionFilterSchema).optional(),
-    canceledAt: nullableDateComparatorSchema.optional(),
     completedAt: nullableDateComparatorSchema.optional(),
-    completedProjectMilestones: projectMilestoneCollectionFilterSchema.optional(),
-    createdAt: dateComparatorSchema.optional(),
     creator: userFilterSchema.optional(),
     customerCount: numberComparatorSchema.optional(),
     every: projectFilterSchema.optional(),
-    hasBlockedByRelations: relationExistsComparatorSchema.optional(),
-    hasBlockingRelations: relationExistsComparatorSchema.optional(),
-    hasDependedOnByRelations: relationExistsComparatorSchema.optional(),
-    hasDependsOnRelations: relationExistsComparatorSchema.optional(),
-    hasRelatedRelations: relationExistsComparatorSchema.optional(),
-    hasViolatedRelations: relationExistsComparatorSchema.optional(),
     health: stringComparatorSchema.optional(),
-    healthWithAge: stringComparatorSchema.optional(),
     id: idComparatorSchema.optional(),
-    initiatives: initiativeCollectionFilterSchema.optional(),
     issues: issueCollectionFilterSchema.optional(),
-    lastAppliedTemplate: nullableTemplateFilterSchema.optional(),
     lead: nullableUserFilterSchema.optional(),
     length: numberComparatorSchema.optional(),
     members: userCollectionFilterSchema.optional(),
     name: stringComparatorSchema.optional(),
     needs: customerNeedCollectionFilterSchema.optional(),
-    nextProjectMilestone: projectMilestoneFilterSchema.optional(),
     or: z.array(projectCollectionFilterSchema).optional(),
     priority: nullableNumberComparatorSchema.optional(),
-    projectMilestones: projectMilestoneCollectionFilterSchema.optional(),
-    projectUpdates: projectUpdatesCollectionFilterSchema.optional(),
-    roadmaps: roadmapCollectionFilterSchema.optional(),
-    searchableContent: contentComparatorSchema.optional(),
-    slugId: stringComparatorSchema.optional(),
     some: projectFilterSchema.optional(),
     startDate: nullableDateComparatorSchema.optional(),
-    state: stringComparatorSchema.optional(),
     status: projectStatusFilterSchema.optional(),
     targetDate: nullableDateComparatorSchema.optional(),
-    updatedAt: dateComparatorSchema.optional(),
   })
 );
 
 export const documentFilterSchema: z.ZodSchema<DocumentFilter> = z.lazy(() =>
   z.object({
     and: z.array(documentFilterSchema).optional(),
-    createdAt: dateComparatorSchema.optional(),
     creator: userFilterSchema.optional(),
     id: idComparatorSchema.optional(),
     initiative: initiativeFilterSchema.optional(),
     or: z.array(documentFilterSchema).optional(),
     project: projectFilterSchema.optional(),
-    slugId: stringComparatorSchema.optional(),
     title: stringComparatorSchema.optional(),
-    updatedAt: dateComparatorSchema.optional(),
   })
 );
+
+export const nullableDocumentContentFilterSchema: z.ZodSchema<NullableDocumentContentFilter> =
+  z.lazy(() =>
+    z.object({
+      and: z.array(nullableDocumentContentFilterSchema).optional(),
+      document: documentFilterSchema.optional(),
+      id: idComparatorSchema.optional(),
+      null: scalarsSchema.shape.Boolean.optional(),
+      or: z.array(nullableDocumentContentFilterSchema).optional(),
+      project: projectFilterSchema.optional(),
+    })
+  );
 
 export const commentFilterSchema: z.ZodSchema<CommentFilter> = z.lazy(() =>
   z.object({
     and: z.array(commentFilterSchema).optional(),
     body: stringComparatorSchema.optional(),
-    createdAt: dateComparatorSchema.optional(),
-    documentContent: nullableDocumentContentFilterSchema.optional(),
     id: idComparatorSchema.optional(),
     issue: nullableIssueFilterSchema.optional(),
     needs: customerNeedCollectionFilterSchema.optional(),
@@ -1222,63 +923,23 @@ export const commentFilterSchema: z.ZodSchema<CommentFilter> = z.lazy(() =>
     parent: nullableCommentFilterSchema.optional(),
     projectUpdate: nullableProjectUpdateFilterSchema.optional(),
     reactions: reactionCollectionFilterSchema.optional(),
-    updatedAt: dateComparatorSchema.optional(),
     user: userFilterSchema.optional(),
   })
 );
 
 export const issueFilterSchema: z.ZodSchema<IssueFilter> = z.lazy(() =>
   z.object({
-    addedToCycleAt: nullableDateComparatorSchema.optional(),
-    addedToCyclePeriod: cyclePeriodComparatorSchema.optional(),
     and: z.array(issueFilterSchema).optional(),
-    archivedAt: nullableDateComparatorSchema.optional(),
     assignee: nullableUserFilterSchema.optional(),
-    attachments: attachmentCollectionFilterSchema.optional(),
-    autoArchivedAt: nullableDateComparatorSchema.optional(),
-    autoClosedAt: nullableDateComparatorSchema.optional(),
-    canceledAt: nullableDateComparatorSchema.optional(),
     children: issueCollectionFilterSchema.optional(),
     comments: commentCollectionFilterSchema.optional(),
-    completedAt: nullableDateComparatorSchema.optional(),
-    createdAt: dateComparatorSchema.optional(),
-    creator: nullableUserFilterSchema.optional(),
-    customerCount: numberComparatorSchema.optional(),
-    cycle: nullableCycleFilterSchema.optional(),
     description: nullableStringComparatorSchema.optional(),
-    dueDate: nullableTimelessDateComparatorSchema.optional(),
-    estimate: estimateComparatorSchema.optional(),
-    hasBlockedByRelations: relationExistsComparatorSchema.optional(),
-    hasBlockingRelations: relationExistsComparatorSchema.optional(),
-    hasDuplicateRelations: relationExistsComparatorSchema.optional(),
-    hasRelatedRelations: relationExistsComparatorSchema.optional(),
     id: idComparatorSchema.optional(),
     labels: issueLabelCollectionFilterSchema.optional(),
-    lastAppliedTemplate: nullableTemplateFilterSchema.optional(),
-    needs: customerNeedCollectionFilterSchema.optional(),
-    number: numberComparatorSchema.optional(),
     or: z.array(issueFilterSchema).optional(),
     parent: nullableIssueFilterSchema.optional(),
-    priority: nullableNumberComparatorSchema.optional(),
     project: nullableProjectFilterSchema.optional(),
-    projectMilestone: nullableProjectMilestoneFilterSchema.optional(),
-    reactions: reactionCollectionFilterSchema.optional(),
-    recurringIssueTemplate: nullableTemplateFilterSchema.optional(),
-    searchableContent: contentComparatorSchema.optional(),
-    slaStatus: slaStatusComparatorSchema.optional(),
-    snoozedBy: nullableUserFilterSchema.optional(),
-    snoozedUntilAt: nullableDateComparatorSchema.optional(),
-    sourceMetadata: sourceMetadataComparatorSchema.optional(),
-    startedAt: nullableDateComparatorSchema.optional(),
-    state: workflowStateFilterSchema.optional(),
-    subscribers: userCollectionFilterSchema.optional(),
     team: teamFilterSchema.optional(),
     title: stringComparatorSchema.optional(),
-    triagedAt: nullableDateComparatorSchema.optional(),
-    updatedAt: dateComparatorSchema.optional(),
   })
-);
-
-export const linearIssueFilterSchema: z.ZodSchema<LinearIssueFilter> = z.lazy(
-  () => issueFilterSchema
 );

@@ -3,8 +3,8 @@ import { LinearClient } from '@linear/sdk';
 import {
   issueBatchCreateInputSchema,
   issueCreateInputSchema,
+  issueFilterSchema,
   issueUpdateInputSchema,
-  linearIssueFilterSchema,
 } from '../../zod-schemas.js';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 
@@ -50,9 +50,7 @@ export function registerIssueTools(server: McpServer, linearClient: LinearClient
     'Retrieves a list of Linear issues with optional filtering and pagination parameters. Use this tool when you need to browse or search through multiple issues. You can filter by team, state, assignee, or other criteria by specifying these in the params object.',
     {
       // linearClient.issues
-      filter: linearIssueFilterSchema.describe(
-        'Parameters for issue listing (pagination, filtering)'
-      ),
+      filter: issueFilterSchema.describe('Parameters for issue listing (pagination, filtering)'),
     },
     async ({ filter }) => {
       try {
