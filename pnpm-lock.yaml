@@ -12,8 +12,8 @@ importers:
         specifier: ^39.0.0
         version: 39.0.0
       '@modelcontextprotocol/sdk':
-        specifier: ^1.0.0
-        version: 1.9.0
+        specifier: ^1.10.2
+        version: 1.10.2
       dotenv:
         specifier: ^16.3.1
         version: 16.5.0
@@ -85,8 +85,8 @@ packages:
     resolution: {integrity: sha512-GFZakeWsLFXyJjhrjt/VOW/lxMX9obOVw7ItypYWDh8IEzIui6gVN3EBof5A7zKqpdc6fsZEPYCvrI5FVet9+Q==}
     engines: {node: '>=12.x', yarn: 1.x}
 
-  '@modelcontextprotocol/sdk@1.9.0':
-    resolution: {integrity: sha512-Jq2EUCQpe0iyO5FGpzVYDNFR6oR53AIrwph9yWl7uSc7IWUMsrmpmSaTGra5hQNunXpM+9oit85p924jWuHzUA==}
+  '@modelcontextprotocol/sdk@1.10.2':
+    resolution: {integrity: sha512-rb6AMp2DR4SN+kc6L1ta2NCpApyA9WYNx3CrTSZvGxq9wH71bRur+zRqPfg0vQ9mjywR7qZdX2RGHOPq3ss+tA==}
     engines: {node: '>=18'}
 
   '@nodelib/fs.scandir@2.1.5':
@@ -1250,7 +1250,7 @@ snapshots:
     transitivePeerDependencies:
       - encoding
 
-  '@modelcontextprotocol/sdk@1.9.0':
+  '@modelcontextprotocol/sdk@1.10.2':
     dependencies:
       content-type: 1.0.5
       cors: 2.8.5

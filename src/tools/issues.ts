@@ -12,7 +12,7 @@ import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
  * Register issue-related tools with the MCP server
  */
 export function registerIssueTools(server: McpServer, linearClient: LinearClient) {
-  server.tool(
+  const getIssue = server.tool(
     'getIssue',
     'Retrieves detailed information about a specific Linear issue by its ID. Use this tool when you need to look up information about a particular issue, such as its title, description, status, priority, assignee, or other metadata.',
     {
@@ -45,7 +45,7 @@ export function registerIssueTools(server: McpServer, linearClient: LinearClient
     }
   );
 
-  server.tool(
+  const getIssues = server.tool(
     'getIssues',
     'Retrieves a list of Linear issues with optional filtering and pagination parameters. Use this tool when you need to browse or search through multiple issues. You can filter by team, state, assignee, or other criteria by specifying these in the params object.',
     {
@@ -97,7 +97,7 @@ export function registerIssueTools(server: McpServer, linearClient: LinearClient
     }
   );
 
-  server.tool(
+  const createIssue = server.tool(
     'createIssue',
     "Creates a new issue in Linear with the provided details. Use this tool when you need to add a new task, bug report, or feature request to Linear. Required fields are 'title' and 'teamId'. Optional fields include 'description', 'assigneeId', 'priority', 'labelIds', and 'stateId'.",
     {
@@ -143,7 +143,7 @@ export function registerIssueTools(server: McpServer, linearClient: LinearClient
     }
   );
 
-  server.tool(
+  const updateIssue = server.tool(
     'updateIssue',
     "Modifies an existing Linear issue with the provided update data. Use this tool when you need to change an issue's properties such as title, description, status, priority, assignee, or labels. Provide the issue ID and only the fields you want to update.",
     {
@@ -178,7 +178,7 @@ export function registerIssueTools(server: McpServer, linearClient: LinearClient
     }
   );
 
-  server.tool(
+  const deleteIssue = server.tool(
     'deleteIssue',
     'Permanently removes an issue from Linear. Use this tool with caution when an issue is no longer needed or was created in error. This action cannot be undone, and all data associated with the issue will be lost.',
     {
@@ -211,7 +211,7 @@ export function registerIssueTools(server: McpServer, linearClient: LinearClient
     }
   );
 
-  server.tool(
+  const createIssueBatch = server.tool(
     'createIssueBatch',
     'Creates multiple Linear issues in a single operation. Use this tool when you need to add several related issues at once. Each issue in the array requires the same fields as createIssue (title and teamId are required). This is more efficient than creating issues one by one for large batches.',
     {
@@ -250,4 +250,31 @@ export function registerIssueTools(server: McpServer, linearClient: LinearClient
       }
     }
   );
+
+  return {
+    getIssue: {
+      name: 'getIssue',
+      tool: getIssue,
+    },
+    getIssues: {
+      name: 'getIssues',
+      tool: getIssues,
+    },
+    createIssue: {
+      name: 'createIssue',
+      tool: createIssue,
+    },
+    updateIssue: {
+      name: 'updateIssue',
+      tool: updateIssue,
+    },
+    deleteIssue: {
+      name: 'deleteIssue',
+      tool: deleteIssue,
+    },
+    createIssueBatch: {
+      name: 'createIssueBatch',
+      tool: createIssueBatch,
+    },
+  };
 }

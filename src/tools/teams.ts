@@ -8,7 +8,7 @@ import { teamFilterSchema } from '../../zod-schemas.js';
  */
 export function registerTeamTools(server: McpServer, linearClient: LinearClient) {
   // Get team by ID
-  server.tool(
+  const getTeamById = server.tool(
     'getTeamById',
     "Retrieves detailed information about a specific Linear team by its ID. Use this tool when you need to look up a team's details, such as its name, description, and member list. This is useful when creating issues that need to be assigned to a specific team or when you need to reference team-specific information.",
     {
@@ -55,7 +55,7 @@ export function registerTeamTools(server: McpServer, linearClient: LinearClient)
   );
 
   // Get teams
-  server.tool(
+  const getTeams = server.tool(
     'getTeams',
     'Retrieves a list of all teams in the Linear workspace with optional filtering parameters. Use this tool when you need to browse or search through all available teams. This is helpful when you need to identify the appropriate team for issue assignment, determine which teams exist in the organization, or find team IDs for other operations.',
     {
@@ -113,4 +113,15 @@ export function registerTeamTools(server: McpServer, linearClient: LinearClient)
       }
     }
   );
+
+  return {
+    getTeamById: {
+      name: 'getTeamById',
+      tool: getTeamById,
+    },
+    getTeams: {
+      name: 'getTeams',
+      tool: getTeams,
+    },
+  };
 }

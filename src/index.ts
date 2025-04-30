@@ -1,4 +1,4 @@
-import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import { McpServer, RegisteredTool } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { LinearClient } from '@linear/sdk';
 import {
@@ -10,6 +10,7 @@ import {
   registerUserTools,
 } from './tools/index.js';
 import { appConfig } from './config.js';
+import { z } from 'zod';
 
 // Parse tool options from environment variables
 const getEnabledTools = (): string[] => {
@@ -32,6 +33,7 @@ const isVerboseLogging = (): boolean => {
 async function main() {
   try {
     const enabledTools = getEnabledTools();
+    const allTools: Record<string, RegisteredTool> = {};
     const verbose = isVerboseLogging();
 
     if (verbose) {
@@ -54,43 +56,113 @@ async function main() {
       if (verbose) {
         console.error('Registering issue tools...');
       }
-      registerIssueTools(server, linearClient);
+      const issueTools = registerIssueTools(server, linearClient);
+      for (const tool of Object.values(issueTools)) {
+        allTools[tool.name] = tool.tool;
+        tool.tool.disable();
+      }
     }
 
     if (enabledTools.includes('comments')) {
       if (verbose) {
         console.error('Registering comment tools...');
       }
-      registerCommentTools(server, linearClient);
+      const commentTools = registerCommentTools(server, linearClient);
+      for (const tool of Object.values(commentTools)) {
+        allTools[tool.name] = tool.tool;
+        tool.tool.disable();
+      }
     }
 
     if (enabledTools.includes('labels')) {
       if (verbose) {
         console.error('Registering label tools...');
       }
-      registerLabelTools(server, linearClient);
+      const labelTools = registerLabelTools(server, linearClient);
+      for (const tool of Object.values(labelTools)) {
+        allTools[tool.name] = tool.tool;
+        tool.tool.disable();
+      }
     }
 
     if (enabledTools.includes('projects')) {
       if (verbose) {
         console.error('Registering project tools...');
       }
-      registerProjectTools(server, linearClient);
+      const projectTools = registerProjectTools(server, linearClient);
+      for (const tool of Object.values(projectTools)) {
+        allTools[tool.name] = tool.tool;
+        tool.tool.disable();
+      }
     }
 
     if (enabledTools.includes('teams')) {
       if (verbose) {
         console.error('Registering team tools...');
       }
-      registerTeamTools(server, linearClient);
+      const teamTools = registerTeamTools(server, linearClient);
+      for (const tool of Object.values(teamTools)) {
+        allTools[tool.name] = tool.tool;
+        tool.tool.disable();
+      }
     }
 
     if (enabledTools.includes('users')) {
       if (verbose) {
         console.error('Registering user tools...');
       }
-      registerUserTools(server, linearClient);
+      const userTools = registerUserTools(server, linearClient);
+      for (const tool of Object.values(userTools)) {
+        allTools[tool.name] = tool.tool;
+        tool.tool.disable();
+      }
     }
+
+    // register getLinearTools tool
+    server.tool(
+      'getLinearTools',
+      'Retrieves a list of all registered tools in the Linear MCP server. Use this tool to get an overview of all available tools and their configurations. This is helpful for understanding the capabilities of the server and for debugging purposes.',
+      {},
+      async () => {
+        const allToolNamesAndDescriptions = Object.entries(allTools).map((tool) => ({
+          name: tool[0],
+          description: tool[1].description,
+        }));
+
+        return {
+          content: [
+            {
+              type: 'text',
+              text: JSON.stringify(allToolNamesAndDescriptions, null, 2),
+            },
+          ],
+        };
+      }
+    );
+
+    // register enableLinearTool tool
+    server.tool(
+      'enableLinearTool',
+      'Enables a specific tool in the Linear MCP server. Use this tool to activate a tool that has been previously registered but is currently disabled. This is helpful for dynamically enabling tools based on user input or other conditions.',
+      {
+        toolName: z.string().describe('Name of the tool to enable'),
+      },
+      async ({ toolName }) => {
+        const tool = allTools[toolName];
+        if (!tool) {
+          throw new Error(`Tool ${toolName} not found`);
+        }
+        tool.enable();
+        return {
+          content: [
+            {
+              type: 'text',
+              text: `Tool ${toolName} enabled`,
+            },
+          ],
+        };
+      }
+    );
 
     // Create transport
     const transport = new StdioServerTransport();

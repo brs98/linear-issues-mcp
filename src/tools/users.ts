@@ -7,7 +7,7 @@ import { userFilterSchema } from '../../zod-schemas.js';
  * Register user-related tools with the MCP server
  */
 export function registerUserTools(server: McpServer, linearClient: LinearClient) {
-  server.tool(
+  const getUserById = server.tool(
     'getUserById',
     'Retrieves detailed information about a specific Linear user by their ID. Use this tool when you need to look up information about a particular user, such as their name, email, display name, or team memberships. This is useful when assigning issues, identifying team members, or determining user roles.',
     {
@@ -39,7 +39,7 @@ export function registerUserTools(server: McpServer, linearClient: LinearClient)
     }
   );
 
-  server.tool(
+  const getUsers = server.tool(
     'getUsers',
     'Retrieves a list of all users in the Linear workspace with optional filtering parameters. Use this tool when you need to browse or search through all available users. This is helpful when you need to identify users for issue assignment, find team members, or look up user IDs for other operations.',
     {
@@ -101,4 +101,15 @@ export function registerUserTools(server: McpServer, linearClient: LinearClient)
       }
     }
   );
+
+  return {
+    getUserById: {
+      name: 'getUserById',
+      tool: getUserById,
+    },
+    getUsers: {
+      name: 'getUsers',
+      tool: getUsers,
+    },
+  };
 }

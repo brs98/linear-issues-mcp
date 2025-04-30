@@ -7,7 +7,7 @@ import { commentCreateInputSchema, commentFilterSchema } from '../../zod-schemas
  */
 export function registerCommentTools(server: McpServer, linearClient: LinearClient) {
   // Get comments
-  server.tool(
+  const getComments = server.tool(
     'getComments',
     'Retrieves comments associated with Linear issues based on specified filters. Use this tool when you need to read discussion threads, feedback, or updates on issues. You can filter by issueId to get comments for a specific issue, or use other filtering parameters to get comments across multiple issues.',
     {
@@ -50,7 +50,7 @@ export function registerCommentTools(server: McpServer, linearClient: LinearClie
   );
 
   // Create comment
-  server.tool(
+  const createComment = server.tool(
     'createComment',
     "Adds a new comment to an existing Linear issue. Use this tool when you need to provide feedback, updates, or additional information on an issue. Required fields are 'issueId' and 'body' which contains the comment text. You can use Markdown formatting in the comment body.",
     {
@@ -81,4 +81,15 @@ export function registerCommentTools(server: McpServer, linearClient: LinearClie
       }
     }
   );
+
+  return {
+    getComments: {
+      name: 'getComments',
+      tool: getComments,
+    },
+    createComment: {
+      name: 'createComment',
+      tool: createComment,
+    },
+  };
 }
